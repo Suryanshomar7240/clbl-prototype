@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLBL - City-Based Life Simulation Learning</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      max-width: 428px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      position: relative;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .user-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .user-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .coins {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 15px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .progress-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #ffd700;
+      transition: width 0.5s ease;
+    }
+
+    /* Navigation */
+    .nav-tabs {
+      display: flex;
+      background: white;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 130px;
+      z-index: 99;
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .nav-tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    /* Screens */
+    .screen {
+      display: none;
+      padding: 20px;
+      min-height: calc(100vh - 200px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Map Screen */
+    .city-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .city-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .exploration-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .map-container {
+      background: #f0f4f8;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .location-card {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .location-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .location-card.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .location-card.completed {
+      border-color: #4caf50;
+    }
+
+    .location-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .location-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .location-status {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .lock-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+    }
+
+    /* Quest Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .modal-subtitle {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .quest-steps {
+      margin: 20px 0;
+    }
+
+    .quest-step {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .step-desc {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .rewards-section {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .rewards-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .rewards-list {
+      display: flex;
+      gap: 15px;
+    }
+
+    .reward-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    /* Commute Animation */
+    .commute-animation {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+    }
+
+    .commute-animation.active {
+      display: flex;
+    }
+
+    .commute-icon {
+      font-size: 80px;
+      animation: moveVehicle 2s ease-in-out;
+    }
+
+    @keyframes moveVehicle {
+
+      0%,
+      100% {
+        transform: translateX(-100px);
+      }
+
+      50% {
+        transform: translateX(100px);
+      }
+    }
+
+    .commute-text {
+      font-size: 20px;
+      margin-top: 20px;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Victory Screen */
+    .victory-screen {
+      text-align: center;
+    }
+
+    .victory-icon {
+      font-size: 100px;
+      animation: bounce 0.6s ease;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    .victory-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 20px 0;
+      color: #4caf50;
+    }
+
+    .victory-message {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .skill-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      margin: 10px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* Home Screen */
+    .home-showcase {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .home-image {
+      font-size: 120px;
+      margin-bottom: 20px;
+    }
+
+    .home-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .home-level {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .upgrade-progress {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .upgrade-title {
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .upgrade-bar {
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .upgrade-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.5s ease;
+    }
+
+    .upgrade-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .vehicle-showcase {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .vehicle-icon {
+      font-size: 80px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .vehicle-name {
+      text-align: center;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .next-upgrade {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .next-upgrade-title {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .next-vehicle {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .next-vehicle-icon {
+      font-size: 40px;
+    }
+
+    .next-vehicle-info {
+      flex: 1;
+    }
+
+    .next-vehicle-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .next-vehicle-requirement {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Leaderboard Screen */
+    .leaderboard-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .leaderboard-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .leaderboard-subtitle {
+      color: #666;
+    }
+
+    .user-rank-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .rank-display {
+      font-size: 48px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .rank-label {
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .leaderboard-list {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .leaderboard-item:last-child {
+      border-bottom: none;
+    }
+
+    .rank-number {
+      width: 40px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #667eea;
+    }
+
+    .rank-medal {
+      font-size: 30px;
+      width: 40px;
+    }
+
+    .user-avatar {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+
+    .user-details {
+      flex: 1;
+    }
+
+    .user-display-name {
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .user-city {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .user-coins {
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #ffd700;
+      position: absolute;
+      animation: confetti-fall 3s linear;
+    }
+
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="user-info">
+        <div class="user-name">👋 Rahul Kumar</div>
+        <div class="coins">🪙 <span id="coinCount">525</span></div>
+      </div>
+      <div class="progress-bars">
+        <div class="progress-item">
+          <span>🗣️ English</span>
+          <div class="progress-bar">
+            <div class="progress-fill" id="englishProgress" style="width: 36%"></div>
+          </div>
+          <span>36%</span>
+        </div>
+        <div class="progress-item">
+          <span>🗺️ City</span>
+          <div class="progress-bar">
+            <div class="progress-fill" id="cityProgress" style="width: 38%"></div>
+          </div>
+          <span>38%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="switchTab('map')">🗺️ Map</div>
+      <div class="nav-tab" onclick="switchTab('home')">🏠 Home</div>
+      <div class="nav-tab" onclick="switchTab('leaderboard')">🏆 Rank</div>
+    </div>
+
+    <!-- Map Screen -->
+    <div class="screen active" id="mapScreen">
+      <div class="city-header">
+        <div class="city-name">📍 Delhi</div>
+        <div class="exploration-badge">City Explored: 38%</div>
+      </div>
+
+      <div class="map-container">
+        <div class="locations-grid" id="locationsGrid">
+          <!-- Locations will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Home Screen -->
+    <div class="screen" id="homeScreen">
+      <div class="home-showcase">
+        <div class="home-image">🏠</div>
+        <div class="home-title">Basic Apartment</div>
+        <div class="home-level">Level 2 • 1BHK</div>
+      </div>
+
+      <div class="upgrade-progress">
+        <div class="upgrade-title">🎯 Progress to Next Home</div>
+        <div class="upgrade-bar">
+          <div class="upgrade-fill" style="width: 65%"></div>
+        </div>
+        <div class="upgrade-info">
+          <span>650 / 1000 XP</span>
+          <span>65%</span>
+        </div>
+      </div>
+
+      <div class="vehicle-showcase">
+        <div class="vehicle-icon">🛵</div>
+        <div class="vehicle-name">Scooter</div>
+
+        <div class="next-upgrade">
+          <div class="next-upgrade-title">Next Upgrade Available</div>
+          <div class="next-vehicle">
+            <div class="next-vehicle-icon">🏍️</div>
+            <div class="next-vehicle-info">
+              <div class="next-vehicle-name">Motorcycle</div>
+              <div class="next-vehicle-requirement">Complete 5 more quests</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">12</div>
+          <div class="stat-label">Quests Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">73</div>
+          <div class="stat-label">Words Learned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">7</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">8</div>
+          <div class="stat-label">Locations Unlocked</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Screen -->
+    <div class="screen" id="leaderboardScreen">
+      <div class="leaderboard-header">
+        <div class="leaderboard-title">🏆 Delhi Leaderboard</div>
+        <div class="leaderboard-subtitle">Weekly Rankings • Resets Monday</div>
+      </div>
+
+      <div class="user-rank-card">
+        <div class="rank-display">#876</div>
+        <div class="rank-label">Your Rank in Delhi</div>
+      </div>
+
+      <div class="leaderboard-list" id="leaderboardList">
+        <!-- Leaderboard items will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Quest Modal -->
+    <div class="modal" id="questModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-icon" id="modalIcon">☕</div>
+          <div class="modal-title" id="modalTitle">Coffee Shop</div>
+          <div class="modal-subtitle" id="modalSubtitle">Order coffee and chat with the barista</div>
+        </div>
+
+        <div class="quest-steps">
+          <div class="quest-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">Vocabulary</div>
+              <div class="step-desc">Learn coffee shop words</div>
+            </div>
+          </div>
+          <div class="quest-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">Read With Me</div>
+              <div class="step-desc">Practice ordering phrases</div>
+            </div>
+          </div>
+          <div class="quest-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <div class="step-title">Grammar</div>
+              <div class="step-desc">Learn polite requests</div>
+            </div>
+          </div>
+          <div class="quest-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <div class="step-title">AI Conversation</div>
+              <div class="step-desc">Talk with AI barista</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rewards-section">
+          <div class="rewards-title">🎁 Quest Rewards</div>
+          <div class="rewards-list">
+            <div class="reward-item">🪙 50 Coins</div>
+            <div class="reward-item">⭐ 30 XP</div>
+            <div class="reward-item">🏅 Badge</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="startQuest()">Start Quest</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Maybe Later</button>
+      </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div class="modal" id="victoryModal">
+      <div class="modal-content victory-screen">
+        <div class="victory-icon">🎉</div>
+        <div class="victory-title">Quest Completed!</div>
+        <div class="victory-message">You successfully handled a Coffee Shop order in English!</div>
+
+        <div class="skill-badge">⭐ Skill Earned: Coffee Shop Master</div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">+50</div>
+            <div class="stat-label">Coins Earned</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">+30</div>
+            <div class="stat-label">XP Gained</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">36%</div>
+            <div class="stat-label">English Level</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">7</div>
+            <div class="stat-label">Day Streak</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="closeVictory()">Continue Learning</button>
+      </div>
+    </div>
+
+    <!-- Commute Animation -->
+    <div class="commute-animation" id="commuteAnimation">
+      <div class="commute-icon" id="commuteVehicle">🛵</div>
+      <div class="commute-text">Going to <span id="commuteDestination">Coffee Shop</span>...</div>
+    </div>
+  </div>
+
+  <script>
+    // Game State
+    let gameState = {
+      coins: 525,
+      englishLevel: 36,
+      cityExploration: 38,
+      homeLevel: 2,
+      vehicle: 'scooter',
+      questsCompleted: 12,
+      wordsLearned: 73,
+      streak: 7,
+      rank: 876
+    };
+
+    // Locations Data
+    const locations = [
+      {
+        id: 'coffee',
+        icon: '☕',
+        name: 'Coffee Shop',
+        description: 'Order coffee & chat',
+        status: 'completed',
+        locked: false,
+        difficulty: 'Easy',
+        coins: 50,
+        xp: 30
+      },
+      {
+        id: 'grocery',
+        icon: '🛒',
+        name: 'Grocery Store',
+        description: 'Buy items & pay',
+        status: 'completed',
+        locked: false,
+        difficulty: 'Easy',
+        coins: 75,
+        xp: 35
+      },
+      {
+        id: 'park',
+        icon: '🌳',
+        name: 'City Park',
+        description: 'Meet & talk',
+        status: 'completed',
+        locked: false,
+        difficulty: 'Easy',
+        coins: 60,
+        xp: 30
+      },
+      {
+        id: 'restaurant',
+        icon: '🍽️',
+        name: 'Restaurant',
+        description: 'Order food',
+        status: 'available',
+        locked: false,
+        difficulty: 'Medium',
+        coins: 100,
+        xp: 50
+      },
+      {
+        id: 'bank',
+        icon: '🏦',
+        name: 'Bank',
+        description: 'Open account',
+        status: 'available',
+        locked: false,
+        difficulty: 'Medium',
+        coins: 125,
+        xp: 60
+      },
+      {
+        id: 'hospital',
+        icon: '🏥',
+        name: 'Hospital',
+        description: 'Medical help',
+        status: 'locked',
+        locked: true,
+        difficulty: 'Hard',
+        coins: 150,
+        xp: 75,
+        requirement: 'Level 3'
+      },
+      {
+        id: 'office',
+        icon: '🏢',
+        name: 'Office',
+        description: 'Workplace talk',
+        status: 'locked',
+        locked: true,
+        difficulty: 'Hard',
+        coins: 150,
+        xp: 75,
+        requirement: 'Level 3'
+      },
+      {
+        id: 'airport',
+        icon: '✈️',
+        name: 'Airport',
+        description: 'Travel scenarios',
+        status: 'locked',
+        locked: true,
+        difficulty: 'Expert',
+        coins: 200,
+        xp: 100,
+        requirement: 'Level 4'
+      }
+    ];
+
+    // Leaderboard Data
+    const leaderboardData = [
+      { rank: 1, name: 'Priya Sharma', city: 'Delhi', coins: 2450 },
+      { rank: 2, name: 'Arjun Patel', city: 'Delhi', coins: 2380 },
+      { rank: 3, name: 'Sneha Reddy', city: 'Delhi', coins: 2210 },
+      { rank: 4, name: 'Vikram Singh', city: 'Delhi', coins: 2050 },
+      { rank: 5, name: 'Ananya Iyer', city: 'Delhi', coins: 1890 },
+      { rank: 875, name: 'Amit Kumar', city: 'Delhi', coins: 530 },
+      { rank: 876, name: 'Rahul Kumar', city: 'Delhi', coins: 525, isCurrentUser: true },
+      { rank: 877, name: 'Neha Gupta', city: 'Delhi', coins: 520 }
+    ];
+
+    let currentLocation = null;
+
+    // Initialize
+    function init() {
+      renderLocations();
+      renderLeaderboard();
+      updateCoinDisplay();
+    }
+
+    // Render Locations
+    function renderLocations() {
+      const grid = document.getElementById('locationsGrid');
+      grid.innerHTML = '';
+
+      locations.forEach(location => {
+        const card = document.createElement('div');
+        card.className = `location-card ${location.status}`;
+
+        if (location.locked) {
+          card.innerHTML = `
+                        <div class="lock-icon">🔒</div>
+                        <div class="location-icon">${location.icon}</div>
+                        <div class="location-name">${location.name}</div>
+                        <div class="location-status">${location.requirement}</div>
+                    `;
+        } else {
+          card.innerHTML = `
+                        ${location.status === 'completed' ? '<div style="position: absolute; top: 10px; right: 10px;">✅</div>' : ''}
+                        <div class="location-icon">${location.icon}</div>
+                        <div class="location-name">${location.name}</div>
+                        <div class="location-status">${location.description}</div>
+                    `;
+          card.onclick = () => openQuestModal(location);
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Render Leaderboard
+    function renderLeaderboard() {
+      const list = document.getElementById('leaderboardList');
+      list.innerHTML = '';
+
+      leaderboardData.forEach(user => {
+        const item = document.createElement('div');
+        item.className = 'leaderboard-item';
+        item.style.background = user.isCurrentUser ? '#f0f4ff' : 'transparent';
+
+        const rankDisplay = user.rank <= 3
+          ? `<div class="rank-medal">${user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉'}</div>`
+          : `<div class="rank-number">#${user.rank}</div>`;
+
+        item.innerHTML = `
+                    ${rankDisplay}
+                    <div class="user-avatar">${user.name.charAt(0)}</div>
+                    <div class="user-details">
+                        <div class="user-display-name">${user.name}</div>
+                        <div class="user-city">${user.city}</div>
+                    </div>
+                    <div class="user-coins">🪙 ${user.coins}</div>
+                `;
+
+        list.appendChild(item);
+      });
+    }
+
+    // Switch Tabs
+    function switchTab(tab) {
+      // Update tab buttons
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update screens
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+      if (tab === 'map') {
+        document.getElementById('mapScreen').classList.add('active');
+      } else if (tab === 'home') {
+        document.getElementById('homeScreen').classList.add('active');
+      } else if (tab === 'leaderboard') {
+        document.getElementById('leaderboardScreen').classList.add('active');
+      }
+    }
+
+    // Open Quest Modal
+    function openQuestModal(location) {
+      if (location.locked) return;
+
+      currentLocation = location;
+
+      document.getElementById('modalIcon').textContent = location.icon;
+      document.getElementById('modalTitle').textContent = location.name;
+      document.getElementById('modalSubtitle').textContent = location.description;
+
+      document.getElementById('questModal').classList.add('active');
+    }
+
+    // Close Modal
+    function closeModal() {
+      document.getElementById('questModal').classList.remove('active');
+      currentLocation = null;
+    }
+
+    // Start Quest
+    function startQuest() {
+      if (!currentLocation) return;
+
+      closeModal();
+
+      // Show commute animation
+      const commuteAnim = document.getElementById('commuteAnimation');
+      const vehicleIcon = document.getElementById('commuteVehicle');
+      const destination = document.getElementById('commuteDestination');
+
+      // Set vehicle based on user's progress
+      vehicleIcon.textContent = gameState.vehicle === 'scooter' ? '🛵' :
+        gameState.vehicle === 'bike' ? '🏍️' : '🚗';
+      destination.textContent = currentLocation.name;
+
+      commuteAnim.classList.add('active');
+
+      // After animation, show victory
+      setTimeout(() => {
+        commuteAnim.classList.remove('active');
+        completeQuest();
+      }, 2500);
+    }
+
+    // Complete Quest
+    function completeQuest() {
+      if (!currentLocation) return;
+
+      // Update game state
+      gameState.coins += currentLocation.coins;
+      gameState.englishLevel += 4;
+      gameState.questsCompleted += 1;
+
+      // Update UI
+      updateCoinDisplay();
+      document.getElementById('englishProgress').style.width = gameState.englishLevel + '%';
+
+      // Mark location as completed
+      const locationIndex = locations.findIndex(l => l.id === currentLocation.id);
+      if (locationIndex !== -1) {
+        locations[locationIndex].status = 'completed';
+        renderLocations();
+      }
+
+      // Show victory modal
+      document.getElementById('victoryModal').classList.add('active');
+
+      // Create confetti
+      createConfetti();
+    }
+
+    // Close Victory Modal
+    function closeVictory() {
+      document.getElementById('victoryModal').classList.remove('active');
+      currentLocation = null;
+    }
+
+    // Update Coin Display
+    function updateCoinDisplay() {
+      document.getElementById('coinCount').textContent = gameState.coins;
+    }
+
+    // Create Confetti
+    function createConfetti() {
+      const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'];
+
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * window.innerWidth + 'px';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 0.5 + 's';
+          document.body.appendChild(confetti);
+
+          setTimeout(() => confetti.remove(), 3000);
+        }, i * 30);
+      }
+    }
+
+    // Initialize on load
+    init();
+  </script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAiGiHF9BUDD7JY5uU7jO1dtcqKR9GJggc",
+      authDomain: "clbl-games.firebaseapp.com",
+      projectId: "clbl-games",
+      storageBucket: "clbl-games.firebasestorage.app",
+      messagingSenderId: "1072410751082",
+      appId: "1:1072410751082:web:7c46182049e7ae3b6f5a13",
+      measurementId: "G-GJBR2YGL1Y"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+</body>
+
+</html>
