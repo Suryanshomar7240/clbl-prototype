@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLBL - City-Based Life Simulation Learning</title>
+  <title>SpeakX CLBL - Interactive Demo with Special Features</title>
   <style>
     * {
       margin: 0;
@@ -13,696 +13,752 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .app-container {
-      max-width: 428px;
-      margin: 0 auto;
-      background: white;
-      min-height: 100vh;
-      position: relative;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Header */
-    .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    }
+
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      background: #000;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .screen {
+      width: 100%;
+      height: 100%;
+      background: #f5f5f5;
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Status Bar & Header */
+    .status-bar {
+      height: 44px;
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 200;
+    }
+
+    .header {
+      background: white;
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      z-index: 200;
     }
 
     .user-info {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .user-name {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .coins {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 8px 15px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .progress-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .progress-item {
-      display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 12px;
-    }
-
-    .progress-bar {
-      flex: 1;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: #ffd700;
-      transition: width 0.5s ease;
-    }
-
-    /* Navigation */
-    .nav-tabs {
-      display: flex;
-      background: white;
-      border-bottom: 1px solid #e0e0e0;
-      position: sticky;
-      top: 130px;
-      z-index: 99;
-    }
-
-    .nav-tab {
-      flex: 1;
-      padding: 15px;
-      text-align: center;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .nav-tab.active {
-      color: #667eea;
-      border-bottom-color: #667eea;
-    }
-
-    /* Screens */
-    .screen {
-      display: none;
-      padding: 20px;
-      min-height: calc(100vh - 200px);
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    /* Map Screen */
-    .city-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .city-name {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 10px;
-    }
-
-    .exploration-badge {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 25px;
-      display: inline-block;
-      font-weight: 600;
-    }
-
-    .map-container {
-      background: #f0f4f8;
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .locations-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .location-card {
-      background: white;
-      border-radius: 15px;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: 2px solid transparent;
-      position: relative;
-    }
-
-    .location-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .location-card.locked {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .location-card.completed {
-      border-color: #4caf50;
-    }
-
-    .location-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
-
-    .location-name {
-      font-weight: 600;
-      margin-bottom: 5px;
-      font-size: 14px;
-    }
-
-    .location-status {
-      font-size: 11px;
-      color: #666;
-    }
-
-    .lock-icon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 20px;
-    }
-
-    /* Quest Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 400px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(50px);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .modal-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-
-    .modal-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .modal-subtitle {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .quest-steps {
-      margin: 20px 0;
-    }
-
-    .quest-step {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-      align-items: center;
-    }
-
-    .step-number {
-      width: 30px;
-      height: 30px;
-      background: #667eea;
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-
-    .step-content {
       flex: 1;
     }
 
-    .step-title {
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-
-    .step-desc {
-      font-size: 12px;
-      color: #666;
-    }
-
-    .rewards-section {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 10px;
-      margin: 20px 0;
-    }
-
-    .rewards-title {
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .rewards-list {
-      display: flex;
-      gap: 15px;
-    }
-
-    .reward-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 14px;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-secondary {
-      background: #e0e0e0;
-      color: #333;
-      margin-top: 10px;
-    }
-
-    /* Commute Animation */
-    .commute-animation {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-    }
-
-    .commute-animation.active {
-      display: flex;
-    }
-
-    .commute-icon {
-      font-size: 80px;
-      animation: moveVehicle 2s ease-in-out;
-    }
-
-    @keyframes moveVehicle {
-
-      0%,
-      100% {
-        transform: translateX(-100px);
-      }
-
-      50% {
-        transform: translateX(100px);
-      }
-    }
-
-    .commute-text {
-      font-size: 20px;
-      margin-top: 20px;
-      animation: fadeIn 1s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    /* Victory Screen */
-    .victory-screen {
-      text-align: center;
-    }
-
-    .victory-icon {
-      font-size: 100px;
-      animation: bounce 0.6s ease;
-    }
-
-    @keyframes bounce {
-
-      0%,
-      100% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.2);
-      }
-    }
-
-    .victory-title {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 20px 0;
-      color: #4caf50;
-    }
-
-    .victory-message {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    .skill-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-weight: 600;
-      margin: 10px 0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin: 20px 0;
-    }
-
-    .stat-card {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: #667eea;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: #666;
-      margin-top: 5px;
-    }
-
-    /* Home Screen */
-    .home-showcase {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      border-radius: 20px;
-      padding: 30px;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .home-image {
-      font-size: 120px;
-      margin-bottom: 20px;
-    }
-
-    .home-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .home-level {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    .upgrade-progress {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-    }
-
-    .upgrade-title {
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-
-    .upgrade-bar {
-      height: 20px;
-      background: #e0e0e0;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-
-    .upgrade-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-      transition: width 0.5s ease;
-    }
-
-    .upgrade-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #666;
-    }
-
-    .vehicle-showcase {
-      background: white;
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .vehicle-icon {
-      font-size: 80px;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .vehicle-name {
-      text-align: center;
-      font-weight: 600;
-      font-size: 18px;
-    }
-
-    .next-upgrade {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
-    }
-
-    .next-upgrade-title {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .next-vehicle {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .next-vehicle-icon {
-      font-size: 40px;
-    }
-
-    .next-vehicle-info {
-      flex: 1;
-    }
-
-    .next-vehicle-name {
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-
-    .next-vehicle-requirement {
-      font-size: 12px;
-      color: #666;
-    }
-
-    /* Leaderboard Screen */
-    .leaderboard-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .leaderboard-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .leaderboard-subtitle {
-      color: #666;
-    }
-
-    .user-rank-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-    }
-
-    .rank-display {
-      font-size: 48px;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .rank-label {
-      text-align: center;
-      font-size: 16px;
-    }
-
-    .leaderboard-list {
-      background: white;
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .leaderboard-item {
-      display: flex;
-      align-items: center;
-      padding: 15px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .leaderboard-item:last-child {
-      border-bottom: none;
-    }
-
-    .rank-number {
+    .avatar {
       width: 40px;
-      font-weight: bold;
-      font-size: 20px;
-      color: #667eea;
-    }
-
-    .rank-medal {
-      font-size: 30px;
-      width: 40px;
-    }
-
-    .user-avatar {
-      width: 45px;
-      height: 45px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 40px;
       border-radius: 50%;
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: bold;
-      margin-right: 15px;
+      font-size: 22px;
     }
 
     .user-details {
       flex: 1;
     }
 
-    .user-display-name {
-      font-weight: 600;
-      margin-bottom: 3px;
+    .user-name {
+      font-size: 15px;
+      font-weight: bold;
+      color: #333;
     }
 
-    .user-city {
-      font-size: 12px;
+    .user-location {
+      font-size: 11px;
       color: #666;
     }
 
-    .user-coins {
-      font-weight: bold;
-      color: #ffd700;
+    .header-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
+    /* Header Badges */
+    .challenges-icon-wrapper {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .challenges-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+      transition: transform 0.2s;
+    }
+
+    .challenges-icon:active {
+      transform: scale(0.95);
+    }
+
+    .challenges-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #f44336;
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      border: 2px solid white;
+    }
+
+    .journey-points-badge {
+      background: linear-gradient(135deg, #9C27B0 0%, #E91E63 100%);
+      padding: 6px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: bold;
+      color: white;
+      font-size: 13px;
+      box-shadow: 0 3px 10px rgba(156, 39, 176, 0.3);
+    }
+
+    .leaderboard-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(255, 165, 0, 0.3);
+      transition: transform 0.2s;
+    }
+
+    .leaderboard-icon:active {
+      transform: scale(0.95);
+    }
+
+    .coins-badge {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: bold;
+      color: white;
+      font-size: 13px;
+      box-shadow: 0 3px 10px rgba(255, 165, 0, 0.3);
+    }
+
+    /* Map - Made scrollable in all directions */
+    .content {
+      position: absolute;
+      top: 104px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: scroll;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .city-map {
+      width: 200%;
+      height: 200%;
+      background: #E8F5E9;
+      position: relative;
+      padding: 20px;
+    }
+
+    .map-background {
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(76, 175, 80, 0.03) 0, rgba(76, 175, 80, 0.03) 1px, transparent 1px, transparent 50px),
+        repeating-linear-gradient(90deg, rgba(76, 175, 80, 0.03) 0, rgba(76, 175, 80, 0.03) 1px, transparent 1px, transparent 50px),
+        linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+    }
+
+    .map-road {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.6);
+      border: 2px dashed rgba(255, 152, 0, 0.3);
+      z-index: 1;
+    }
+
+    .road-horizontal {
+      height: 30px;
+      width: 100%;
+      top: 50%;
+      left: 0;
+    }
+
+    .road-vertical {
+      width: 30px;
+      height: 100%;
+      top: 0;
+      left: 50%;
+    }
+
+    .map-landmark {
+      position: absolute;
+      z-index: 1;
+      opacity: 0.15;
+      pointer-events: none;
+      font-size: 70px;
+    }
+
+    .map-tree {
+      position: absolute;
+      font-size: 35px;
+      opacity: 0.2;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .map-explored {
+      position: fixed;
+      top: 120px;
+      left: 25px;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      border: 2px solid #FF6B35;
+    }
+
+    .explored-text {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 3px;
+    }
+
+    .explored-value {
+      font-size: 22px;
+      font-weight: bold;
+      color: #FF6B35;
+    }
+
+    /* Home building - centered in map */
+    .home-building {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      background: white;
+      border-radius: 13px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border: 3px solid #FF6B35;
+    }
+
+    .home-icon {
+      font-size: 32px;
+      margin-bottom: 4px;
+    }
+
+    .home-label {
+      font-size: 10px;
+      font-weight: bold;
+      color: #FF6B35;
+    }
+
+    /* Quest Pins - Made smaller */
+    .quest-pin {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      z-index: 5;
+    }
+
+    .quest-pin:hover {
+      transform: scale(1.15);
+    }
+
+    .pin-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #FF6B35, #F7931E);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    .pin-emoji {
+      font-size: 22px;
+      transform: rotate(45deg);
+    }
+
+    .pin-label {
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: bold;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1.5px solid #FF6B35;
+    }
+
+    .tomorrow-pill {
+      position: fixed;
+      top: 210px;
+      right: 25px;
+      background: white;
+      border-radius: 13px;
+      padding: 10px 13px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      border: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .tomorrow-pill:active {
+      transform: scale(0.95);
+    }
+
+    .tomorrow-pill.unlocked {
+      border-color: #4CAF50;
+    }
+
+    .ticket-icon {
+      font-size: 30px;
+    }
+
+    .ticket-text {
+      flex: 1;
+    }
+
+    .ticket-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .ticket-subtitle {
+      font-size: 9px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    /* Special Quest Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      width: 90%;
+      max-width: 340px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      font-size: 22px;
+      font-weight: bold;
+      color: #FF6B35;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .special-word-card {
+      background: linear-gradient(135deg, #FFF4E6 0%, #FFE9CC 100%);
+      padding: 25px;
+      border-radius: 18px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .special-word {
+      font-size: 32px;
+      font-weight: bold;
+      color: #FF6B35;
+      margin-bottom: 12px;
+    }
+
+    .special-meaning {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .special-hindi {
+      font-size: 20px;
+      color: #666;
+    }
+
+    .special-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .special-option {
+      background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+      border: none;
+      padding: 16px;
+      border-radius: 13px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #1976D2;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .special-option:active {
+      transform: scale(0.97);
+    }
+
+    .modal-button {
+      width: 100%;
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+      border: none;
+      padding: 16px;
+      border-radius: 13px;
+      font-size: 17px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 18px rgba(255, 107, 53, 0.3);
+      transition: transform 0.2s;
+    }
+
+    .modal-button:active {
+      transform: scale(0.97);
+    }
+
+    /* Tomorrow Reward Modal */
+    .reward-modal-content {
+      background: linear-gradient(135deg, #FFF4E6 0%, #FFE9CC 100%);
+      border-radius: 25px;
+      padding: 35px;
+      text-align: center;
+      width: 90%;
+      max-width: 340px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .reward-title {
+      font-size: 26px;
+      font-weight: bold;
+      color: #FF6B35;
+      margin-bottom: 15px;
+    }
+
+    .reward-subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .reward-items {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .reward-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .reward-item:last-child {
+      border-bottom: none;
+    }
+
+    .reward-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .reward-value {
+      font-size: 19px;
+      font-weight: bold;
+      color: #FF6B35;
+    }
+
+    .close-button {
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      border: none;
+      padding: 14px;
+      border-radius: 13px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    /* Challenges Sheet */
+    .challenges-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 25px 25px 0 0;
+      max-height: 75vh;
+      transform: translateY(100%);
+      transition: transform 0.3s ease-out;
+      z-index: 400;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .challenges-sheet.active {
+      transform: translateY(0);
+    }
+
+    .sheet-header {
+      padding: 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sheet-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .close-sheet {
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .sheet-tabs {
+      display: flex;
+      padding: 15px;
+      gap: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+      color: white;
+    }
+
+    .sheet-content {
+      padding: 15px;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .challenge-card {
+      background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+
+    .challenge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .challenge-text {
+      font-size: 15px;
+      font-weight: bold;
+      color: #1976D2;
+    }
+
+    .challenge-quest {
+      font-size: 13px;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .challenge-time {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .challenge-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .accept-btn,
+    .decline-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .accept-btn {
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      color: white;
+    }
+
+    .decline-btn {
+      background: #f5f5f5;
+      color: #999;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 120px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-150%);
+      background: white;
+      padding: 18px 25px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      z-index: 500;
+      transition: transform 0.4s ease-out;
+      border: 2px solid #4CAF50;
+    }
+
+    .toast.active {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-title {
+      font-size: 17px;
+      font-weight: bold;
+      color: #4CAF50;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .toast-rewards {
+      font-size: 19px;
+      font-weight: bold;
+      color: #FF6B35;
+      text-align: center;
+    }
+
+    /* Confetti Animation */
     .confetti {
       position: fixed;
       width: 10px;
       height: 10px;
-      background: #ffd700;
-      position: absolute;
-      animation: confetti-fall 3s linear;
+      border-radius: 50%;
+      animation: fall 3s linear;
+      z-index: 600;
     }
 
-    @keyframes confetti-fall {
+    @keyframes fall {
       to {
-        transform: translateY(100vh) rotate(360deg);
+        transform: translateY(100vh) rotate(720deg);
         opacity: 0;
       }
     }
@@ -710,525 +766,387 @@
 </head>
 
 <body>
-  <div class="app-container">
-    <!-- Header -->
-    <div class="header">
-      <div class="user-info">
-        <div class="user-name">👋 Rahul Kumar</div>
-        <div class="coins">🪙 <span id="coinCount">525</span></div>
+  <div class="phone-frame">
+    <div class="screen">
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div>9:41</div>
+        <div>📶 ⚡ 100%</div>
       </div>
-      <div class="progress-bars">
-        <div class="progress-item">
-          <span>🗣️ English</span>
-          <div class="progress-bar">
-            <div class="progress-fill" id="englishProgress" style="width: 36%"></div>
+
+      <!-- Header -->
+      <div class="header">
+        <div class="user-info">
+          <div class="avatar">👨</div>
+          <div class="user-details">
+            <div class="user-name">Rahul Sharma</div>
+            <div class="user-location">📍 Connaught Place</div>
           </div>
-          <span>36%</span>
         </div>
-        <div class="progress-item">
-          <span>🗺️ City</span>
-          <div class="progress-bar">
-            <div class="progress-fill" id="cityProgress" style="width: 38%"></div>
+        <div class="header-actions">
+          <div class="challenges-icon-wrapper" onclick="showChallengesSheet()">
+            <div class="challenges-icon">⚔️</div>
+            <div class="challenges-badge" id="challengesBadge">2</div>
           </div>
-          <span>38%</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="nav-tabs">
-      <div class="nav-tab active" onclick="switchTab('map')">🗺️ Map</div>
-      <div class="nav-tab" onclick="switchTab('home')">🏠 Home</div>
-      <div class="nav-tab" onclick="switchTab('leaderboard')">🏆 Rank</div>
-    </div>
-
-    <!-- Map Screen -->
-    <div class="screen active" id="mapScreen">
-      <div class="city-header">
-        <div class="city-name">📍 Delhi</div>
-        <div class="exploration-badge">City Explored: 38%</div>
-      </div>
-
-      <div class="map-container">
-        <div class="locations-grid" id="locationsGrid">
-          <!-- Locations will be populated by JavaScript -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Home Screen -->
-    <div class="screen" id="homeScreen">
-      <div class="home-showcase">
-        <div class="home-image">🏠</div>
-        <div class="home-title">Basic Apartment</div>
-        <div class="home-level">Level 2 • 1BHK</div>
-      </div>
-
-      <div class="upgrade-progress">
-        <div class="upgrade-title">🎯 Progress to Next Home</div>
-        <div class="upgrade-bar">
-          <div class="upgrade-fill" style="width: 65%"></div>
-        </div>
-        <div class="upgrade-info">
-          <span>650 / 1000 XP</span>
-          <span>65%</span>
+          <div class="journey-points-badge">
+            <span id="journeyPoints">0</span> ⭐
+          </div>
+          <div class="leaderboard-icon">🏆</div>
+          <div class="coins-badge">
+            <span id="coinsDisplay">150</span> 🪙
+          </div>
         </div>
       </div>
 
-      <div class="vehicle-showcase">
-        <div class="vehicle-icon">🛵</div>
-        <div class="vehicle-name">Scooter</div>
+      <!-- Map Content - Now scrollable in all directions -->
+      <div class="content">
+        <div class="city-map">
+          <div class="map-background"></div>
 
-        <div class="next-upgrade">
-          <div class="next-upgrade-title">Next Upgrade Available</div>
-          <div class="next-vehicle">
-            <div class="next-vehicle-icon">🏍️</div>
-            <div class="next-vehicle-info">
-              <div class="next-vehicle-name">Motorcycle</div>
-              <div class="next-vehicle-requirement">Complete 5 more quests</div>
+          <!-- Roads -->
+          <div class="map-road road-horizontal"></div>
+          <div class="map-road road-vertical"></div>
+
+          <!-- Decorative Elements -->
+          <div class="map-landmark" style="top: 15%; left: 15%;">🏛️</div>
+          <div class="map-landmark" style="bottom: 20%; right: 20%;">🕌</div>
+          <div class="map-tree" style="top: 25%; left: 35%;">🌳</div>
+          <div class="map-tree" style="top: 60%; left: 70%;">🌳</div>
+          <div class="map-tree" style="bottom: 30%; left: 25%;">🌳</div>
+          <div class="map-tree" style="top: 40%; right: 30%;">🌳</div>
+
+          <!-- Home Building - Centered -->
+          <div class="home-building">
+            <div class="home-icon">🏠</div>
+            <div class="home-label">HOME</div>
+          </div>
+
+          <!-- Quest Pins - Smaller and distributed around center -->
+          <div class="quest-pin" style="top: 35%; left: 60%;" onclick="startQuest('🍽️ Restaurant')">
+            <div class="pin-icon">
+              <div class="pin-emoji">🍽️</div>
+            </div>
+            <div class="pin-label">Restaurant</div>
+          </div>
+
+          <div class="quest-pin" style="top: 60%; left: 35%;" onclick="startQuest('🏦 Bank')">
+            <div class="pin-icon">
+              <div class="pin-emoji">🏦</div>
+            </div>
+            <div class="pin-label">Bank</div>
+          </div>
+
+          <div class="quest-pin" style="top: 30%; left: 35%;" onclick="startQuest('🌳 Park')">
+            <div class="pin-icon">
+              <div class="pin-emoji">🌳</div>
+            </div>
+            <div class="pin-label">Park</div>
+          </div>
+
+          <div class="quest-pin" style="top: 55%; left: 60%;" onclick="startQuest('🏥 Hospital')">
+            <div class="pin-icon">
+              <div class="pin-emoji">🏥</div>
+            </div>
+            <div class="pin-label">Hospital</div>
+          </div>
+
+          <div class="quest-pin" style="top: 42%; left: 70%;" onclick="startQuest('🏪 Store')">
+            <div class="pin-icon">
+              <div class="pin-emoji">🏪</div>
+            </div>
+            <div class="pin-label">Store</div>
+          </div>
+
+          <div class="quest-pin" style="top: 68%; left: 48%;" onclick="startQuest('🚉 Station')">
+            <div class="pin-icon">
+              <div class="pin-emoji">🚉</div>
+            </div>
+            <div class="pin-label">Station</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Explored Counter -->
+      <div class="map-explored">
+        <div class="explored-text">MAP EXPLORED</div>
+        <div class="explored-value"><span id="mapExplored">25</span>%</div>
+      </div>
+
+      <!-- Tomorrow Ticket -->
+      <div class="tomorrow-pill" id="tomorrowPill" onclick="showTomorrowReward()">
+        <div class="ticket-icon">🎫</div>
+        <div class="ticket-text">
+          <div class="ticket-title">Tomorrow Ticket</div>
+          <div class="ticket-subtitle">Complete 1 quest</div>
+        </div>
+      </div>
+
+      <!-- Special Quest Modal -->
+      <div class="modal-overlay" id="specialQuestModal">
+        <div class="modal-content">
+          <div class="modal-header">✨ Special Quest! ✨</div>
+          <div id="specialQuestContent"></div>
+        </div>
+      </div>
+
+      <!-- Tomorrow Reward Modal -->
+      <div class="modal-overlay" id="tomorrowRewardModal">
+        <div class="reward-modal-content">
+          <div class="reward-title">🎁 Tomorrow's Rewards!</div>
+          <div class="reward-subtitle">Complete quests tomorrow to get:</div>
+          <div class="reward-items">
+            <div class="reward-item">
+              <div class="reward-label">🪙 Coins</div>
+              <div class="reward-value">2x</div>
+            </div>
+            <div class="reward-item">
+              <div class="reward-label">⭐ Journey Points</div>
+              <div class="reward-value">2x</div>
+            </div>
+            <div class="reward-item">
+              <div class="reward-label">🎯 Special Quests</div>
+              <div class="reward-value">+50%</div>
             </div>
           </div>
+          <button class="close-button" onclick="closeTomorrowReward()">Got it! ✓</button>
         </div>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value">12</div>
-          <div class="stat-label">Quests Completed</div>
+      <!-- Challenges Sheet -->
+      <div class="challenges-sheet" id="challengesSheet">
+        <div class="sheet-header">
+          <div class="sheet-title">⚔️ Challenges</div>
+          <div class="close-sheet" onclick="closeChallengesSheet()">×</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">73</div>
-          <div class="stat-label">Words Learned</div>
+        <div class="sheet-tabs">
+          <button class="tab active" onclick="switchTab(0)">New (2)</button>
+          <button class="tab" onclick="switchTab(1)">Pending (1)</button>
+          <button class="tab" onclick="switchTab(2)">Completed</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">7</div>
-          <div class="stat-label">Day Streak</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">8</div>
-          <div class="stat-label">Locations Unlocked</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Leaderboard Screen -->
-    <div class="screen" id="leaderboardScreen">
-      <div class="leaderboard-header">
-        <div class="leaderboard-title">🏆 Delhi Leaderboard</div>
-        <div class="leaderboard-subtitle">Weekly Rankings • Resets Monday</div>
-      </div>
-
-      <div class="user-rank-card">
-        <div class="rank-display">#876</div>
-        <div class="rank-label">Your Rank in Delhi</div>
-      </div>
-
-      <div class="leaderboard-list" id="leaderboardList">
-        <!-- Leaderboard items will be populated by JavaScript -->
-      </div>
-    </div>
-
-    <!-- Quest Modal -->
-    <div class="modal" id="questModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="modal-icon" id="modalIcon">☕</div>
-          <div class="modal-title" id="modalTitle">Coffee Shop</div>
-          <div class="modal-subtitle" id="modalSubtitle">Order coffee and chat with the barista</div>
-        </div>
-
-        <div class="quest-steps">
-          <div class="quest-step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <div class="step-title">Vocabulary</div>
-              <div class="step-desc">Learn coffee shop words</div>
+        <div class="sheet-content">
+          <div class="tab-panel active" id="panel0">
+            <div class="challenge-card">
+              <div class="challenge-header">
+                <span class="challenge-text">Priya challenged you!</span>
+              </div>
+              <div class="challenge-quest">🍽️ Restaurant • Word Battle</div>
+              <div class="challenge-time">⏱️ 23h 45m left</div>
+              <div class="challenge-actions">
+                <button class="accept-btn" onclick="acceptChallenge('Priya', '🍽️ Restaurant')">Accept</button>
+                <button class="decline-btn" onclick="declineChallenge()">Decline</button>
+              </div>
+            </div>
+            <div class="challenge-card">
+              <div class="challenge-header">
+                <span class="challenge-text">Amit challenged you!</span>
+              </div>
+              <div class="challenge-quest">🏦 Bank • Grammar Duel</div>
+              <div class="challenge-time">⏱️ 22h 30m left</div>
+              <div class="challenge-actions">
+                <button class="accept-btn" onclick="acceptChallenge('Amit', '🏦 Bank')">Accept</button>
+                <button class="decline-btn" onclick="declineChallenge()">Decline</button>
+              </div>
             </div>
           </div>
-          <div class="quest-step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <div class="step-title">Read With Me</div>
-              <div class="step-desc">Practice ordering phrases</div>
+          <div class="tab-panel" id="panel1">
+            <div class="challenge-card">
+              <div class="challenge-header">
+                <span class="challenge-text">Waiting for Rahul</span>
+              </div>
+              <div class="challenge-quest">🌳 Park • Speed Race</div>
+              <div class="challenge-time">⏱️ 20h 15m left</div>
+              <div style="font-size: 12px; color: #999; margin-top: 7px;">Pending...</div>
             </div>
           </div>
-          <div class="quest-step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <div class="step-title">Grammar</div>
-              <div class="step-desc">Learn polite requests</div>
-            </div>
-          </div>
-          <div class="quest-step">
-            <div class="step-number">4</div>
-            <div class="step-content">
-              <div class="step-title">AI Conversation</div>
-              <div class="step-desc">Talk with AI barista</div>
-            </div>
+          <div class="tab-panel" id="panel2">
+            <div class="empty-state">No completed challenges yet</div>
           </div>
         </div>
-
-        <div class="rewards-section">
-          <div class="rewards-title">🎁 Quest Rewards</div>
-          <div class="rewards-list">
-            <div class="reward-item">🪙 50 Coins</div>
-            <div class="reward-item">⭐ 30 XP</div>
-            <div class="reward-item">🏅 Badge</div>
-          </div>
-        </div>
-
-        <button class="btn btn-primary" onclick="startQuest()">Start Quest</button>
-        <button class="btn btn-secondary" onclick="closeModal()">Maybe Later</button>
       </div>
-    </div>
 
-    <!-- Victory Modal -->
-    <div class="modal" id="victoryModal">
-      <div class="modal-content victory-screen">
-        <div class="victory-icon">🎉</div>
-        <div class="victory-title">Quest Completed!</div>
-        <div class="victory-message">You successfully handled a Coffee Shop order in English!</div>
-
-        <div class="skill-badge">⭐ Skill Earned: Coffee Shop Master</div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value">+50</div>
-            <div class="stat-label">Coins Earned</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">+30</div>
-            <div class="stat-label">XP Gained</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">36%</div>
-            <div class="stat-label">English Level</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">7</div>
-            <div class="stat-label">Day Streak</div>
-          </div>
-        </div>
-
-        <button class="btn btn-primary" onclick="closeVictory()">Continue Learning</button>
+      <!-- Toast Notification -->
+      <div class="toast" id="toast">
+        <div class="toast-title">✨ Nice! ✨</div>
+        <div class="toast-rewards">+<span id="toastCoins">5</span> 🪙 • +<span id="toastPoints">2</span> ⭐</div>
       </div>
-    </div>
-
-    <!-- Commute Animation -->
-    <div class="commute-animation" id="commuteAnimation">
-      <div class="commute-icon" id="commuteVehicle">🛵</div>
-      <div class="commute-text">Going to <span id="commuteDestination">Coffee Shop</span>...</div>
     </div>
   </div>
 
   <script>
-    // Game State
     let gameState = {
-      coins: 525,
-      englishLevel: 36,
-      cityExploration: 38,
-      homeLevel: 2,
-      vehicle: 'scooter',
-      questsCompleted: 12,
-      wordsLearned: 73,
-      streak: 7,
-      rank: 876
+      coins: 150,
+      journeyPoints: 0,
+      mapExplored: 25,
+      tomorrowTicketClaimed: false,
+      specialQuestShown: false
     };
 
-    // Locations Data
-    const locations = [
-      {
-        id: 'coffee',
-        icon: '☕',
-        name: 'Coffee Shop',
-        description: 'Order coffee & chat',
-        status: 'completed',
-        locked: false,
-        difficulty: 'Easy',
-        coins: 50,
-        xp: 30
-      },
-      {
-        id: 'grocery',
-        icon: '🛒',
-        name: 'Grocery Store',
-        description: 'Buy items & pay',
-        status: 'completed',
-        locked: false,
-        difficulty: 'Easy',
-        coins: 75,
-        xp: 35
-      },
-      {
-        id: 'park',
-        icon: '🌳',
-        name: 'City Park',
-        description: 'Meet & talk',
-        status: 'completed',
-        locked: false,
-        difficulty: 'Easy',
-        coins: 60,
-        xp: 30
-      },
-      {
-        id: 'restaurant',
-        icon: '🍽️',
-        name: 'Restaurant',
-        description: 'Order food',
-        status: 'available',
-        locked: false,
-        difficulty: 'Medium',
-        coins: 100,
-        xp: 50
-      },
-      {
-        id: 'bank',
-        icon: '🏦',
-        name: 'Bank',
-        description: 'Open account',
-        status: 'available',
-        locked: false,
-        difficulty: 'Medium',
-        coins: 125,
-        xp: 60
-      },
-      {
-        id: 'hospital',
-        icon: '🏥',
-        name: 'Hospital',
-        description: 'Medical help',
-        status: 'locked',
-        locked: true,
-        difficulty: 'Hard',
-        coins: 150,
-        xp: 75,
-        requirement: 'Level 3'
-      },
-      {
-        id: 'office',
-        icon: '🏢',
-        name: 'Office',
-        description: 'Workplace talk',
-        status: 'locked',
-        locked: true,
-        difficulty: 'Hard',
-        coins: 150,
-        xp: 75,
-        requirement: 'Level 3'
-      },
-      {
-        id: 'airport',
-        icon: '✈️',
-        name: 'Airport',
-        description: 'Travel scenarios',
-        status: 'locked',
-        locked: true,
-        difficulty: 'Expert',
-        coins: 200,
-        xp: 100,
-        requirement: 'Level 4'
+    function updateCoins(amt) {
+      gameState.coins += amt;
+      document.getElementById('coinsDisplay').textContent = gameState.coins;
+    }
+    function updateJourneyPoints(amt) {
+      gameState.journeyPoints += amt;
+      document.getElementById('journeyPoints').textContent = gameState.journeyPoints;
+    }
+    function updateMapExplored(amt) {
+      gameState.mapExplored = Math.min(gameState.mapExplored + amt, 100);
+      document.getElementById('mapExplored').textContent = gameState.mapExplored;
+    }
+
+    function startQuest(name) {
+      // 40% chance to show special quest
+      if (!gameState.specialQuestShown && Math.random() < 0.4) {
+        setTimeout(() => showSpecialQuest(), 1500);
+        gameState.specialQuestShown = true;
       }
-    ];
-
-    // Leaderboard Data
-    const leaderboardData = [
-      { rank: 1, name: 'Priya Sharma', city: 'Delhi', coins: 2450 },
-      { rank: 2, name: 'Arjun Patel', city: 'Delhi', coins: 2380 },
-      { rank: 3, name: 'Sneha Reddy', city: 'Delhi', coins: 2210 },
-      { rank: 4, name: 'Vikram Singh', city: 'Delhi', coins: 2050 },
-      { rank: 5, name: 'Ananya Iyer', city: 'Delhi', coins: 1890 },
-      { rank: 875, name: 'Amit Kumar', city: 'Delhi', coins: 530 },
-      { rank: 876, name: 'Rahul Kumar', city: 'Delhi', coins: 525, isCurrentUser: true },
-      { rank: 877, name: 'Neha Gupta', city: 'Delhi', coins: 520 }
-    ];
-
-    let currentLocation = null;
-
-    // Initialize
-    function init() {
-      renderLocations();
-      renderLeaderboard();
-      updateCoinDisplay();
+      alert(`🚶 Starting: ${name}\n\nWatch for surprise quests on the way!`);
     }
 
-    // Render Locations
-    function renderLocations() {
-      const grid = document.getElementById('locationsGrid');
-      grid.innerHTML = '';
+    function showSpecialQuest() {
+      const types = ['vocab', 'grammar', 'speaking'];
+      const type = types[Math.floor(Math.random() * types.length)];
+      const modal = document.getElementById('specialQuestModal');
+      const content = document.getElementById('specialQuestContent');
 
-      locations.forEach(location => {
-        const card = document.createElement('div');
-        card.className = `location-card ${location.status}`;
-
-        if (location.locked) {
-          card.innerHTML = `
-                        <div class="lock-icon">🔒</div>
-                        <div class="location-icon">${location.icon}</div>
-                        <div class="location-name">${location.name}</div>
-                        <div class="location-status">${location.requirement}</div>
-                    `;
-        } else {
-          card.innerHTML = `
-                        ${location.status === 'completed' ? '<div style="position: absolute; top: 10px; right: 10px;">✅</div>' : ''}
-                        <div class="location-icon">${location.icon}</div>
-                        <div class="location-name">${location.name}</div>
-                        <div class="location-status">${location.description}</div>
-                    `;
-          card.onclick = () => openQuestModal(location);
-        }
-
-        grid.appendChild(card);
-      });
-    }
-
-    // Render Leaderboard
-    function renderLeaderboard() {
-      const list = document.getElementById('leaderboardList');
-      list.innerHTML = '';
-
-      leaderboardData.forEach(user => {
-        const item = document.createElement('div');
-        item.className = 'leaderboard-item';
-        item.style.background = user.isCurrentUser ? '#f0f4ff' : 'transparent';
-
-        const rankDisplay = user.rank <= 3
-          ? `<div class="rank-medal">${user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉'}</div>`
-          : `<div class="rank-number">#${user.rank}</div>`;
-
-        item.innerHTML = `
-                    ${rankDisplay}
-                    <div class="user-avatar">${user.name.charAt(0)}</div>
-                    <div class="user-details">
-                        <div class="user-display-name">${user.name}</div>
-                        <div class="user-city">${user.city}</div>
+      if (type === 'vocab') {
+        content.innerHTML = `
+                    <div class="special-word-card">
+                        <div class="special-word">Fare</div>
+                        <div class="special-meaning">Money to pay for ride</div>
+                        <div class="special-hindi">किराया</div>
                     </div>
-                    <div class="user-coins">🪙 ${user.coins}</div>
+                    <button class="modal-button" onclick="completeSpecialQuest(5, 2)">Got it! ✓</button>
                 `;
+      } else if (type === 'grammar') {
+        content.innerHTML = `
+                    <div style="font-size: 17px; font-weight: bold; margin-bottom: 18px;">How much _____ it?</div>
+                    <div class="special-options">
+                        <button class="special-option" onclick="completeSpecialQuest(8, 3)">is</button>
+                        <button class="special-option" onclick="completeSpecialQuest(8, 3)">are</button>
+                    </div>
+                `;
+      } else {
+        content.innerHTML = `
+                    <div style="font-size: 23px; font-weight: bold; color: #FF6B35; margin-bottom: 18px; padding: 18px; background: #FFF4E6; border-radius: 13px;">"India Gate, please"</div>
+                    <button class="modal-button" onclick="simulateRecording()" style="background: linear-gradient(135deg, #4CAF50, #8BC34A);">🎤 Tap to Speak</button>
+                `;
+      }
+      modal.classList.add('active');
+    }
 
-        list.appendChild(item);
+    function simulateRecording() {
+      const btn = event.target;
+      btn.innerHTML = '🎤 Recording...';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.innerHTML = '✓ Great!';
+        setTimeout(() => completeSpecialQuest(10, 5), 500);
+      }, 2000);
+    }
+
+    function completeSpecialQuest(coins, points) {
+      document.getElementById('specialQuestModal').classList.remove('active');
+      updateCoins(coins);
+      updateJourneyPoints(points);
+
+      document.getElementById('toastCoins').textContent = coins;
+      document.getElementById('toastPoints').textContent = points;
+      const toast = document.getElementById('toast');
+      toast.classList.add('active');
+
+      for (let i = 0; i < 30; i++) createConfetti();
+
+      setTimeout(() => toast.classList.remove('active'), 1500);
+
+      if (!gameState.tomorrowTicketClaimed) claimTomorrowTicket();
+    }
+
+    function claimTomorrowTicket() {
+      gameState.tomorrowTicketClaimed = true;
+      const pill = document.getElementById('tomorrowPill');
+      pill.classList.add('unlocked');
+      pill.innerHTML = `
+                <div class="ticket-icon">✅</div>
+                <div class="ticket-text">
+                    <div class="ticket-title">Tomorrow: 2x Coins!</div>
+                    <div class="ticket-subtitle">Tap to preview</div>
+                </div>
+            `;
+      setTimeout(() => alert('🎉 Tomorrow Reward Unlocked!\n\nTap the badge to see what you\'ll get!'), 500);
+    }
+
+    function showTomorrowReward() {
+      if (gameState.tomorrowTicketClaimed) {
+        document.getElementById('tomorrowRewardModal').classList.add('active');
+        for (let i = 0; i < 50; i++) createConfetti();
+      } else {
+        alert('🔒 Complete 1 quest or 2 special quests to unlock!');
+      }
+    }
+
+    function closeTomorrowReward() {
+      document.getElementById('tomorrowRewardModal').classList.remove('active');
+    }
+
+    function showChallengesSheet() {
+      document.getElementById('challengesSheet').classList.add('active');
+    }
+
+    function closeChallengesSheet() {
+      document.getElementById('challengesSheet').classList.remove('active');
+    }
+
+    function switchTab(idx) {
+      document.querySelectorAll('.tab').forEach((tab, i) => {
+        tab.classList.toggle('active', i === idx);
+        document.getElementById('panel' + i).classList.toggle('active', i === idx);
       });
     }
 
-    // Switch Tabs
-    function switchTab(tab) {
-      // Update tab buttons
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-
-      // Update screens
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-
-      if (tab === 'map') {
-        document.getElementById('mapScreen').classList.add('active');
-      } else if (tab === 'home') {
-        document.getElementById('homeScreen').classList.add('active');
-      } else if (tab === 'leaderboard') {
-        document.getElementById('leaderboardScreen').classList.add('active');
-      }
+    function acceptChallenge(name, quest) {
+      alert(`✅ Challenge Accepted!\n\nRace ${name} to complete ${quest}\nGood luck! 🎯`);
+      closeChallengesSheet();
+      const badge = document.getElementById('challengesBadge');
+      const count = parseInt(badge.textContent) - 1;
+      badge.textContent = count;
+      if (count === 0) badge.style.display = 'none';
     }
 
-    // Open Quest Modal
-    function openQuestModal(location) {
-      if (location.locked) return;
-
-      currentLocation = location;
-
-      document.getElementById('modalIcon').textContent = location.icon;
-      document.getElementById('modalTitle').textContent = location.name;
-      document.getElementById('modalSubtitle').textContent = location.description;
-
-      document.getElementById('questModal').classList.add('active');
+    function declineChallenge() {
+      alert('Challenge declined');
+      closeChallengesSheet();
+      const badge = document.getElementById('challengesBadge');
+      const count = parseInt(badge.textContent) - 1;
+      badge.textContent = count;
+      if (count === 0) badge.style.display = 'none';
     }
 
-    // Close Modal
-    function closeModal() {
-      document.getElementById('questModal').classList.remove('active');
-      currentLocation = null;
-    }
-
-    // Start Quest
-    function startQuest() {
-      if (!currentLocation) return;
-
-      closeModal();
-
-      // Show commute animation
-      const commuteAnim = document.getElementById('commuteAnimation');
-      const vehicleIcon = document.getElementById('commuteVehicle');
-      const destination = document.getElementById('commuteDestination');
-
-      // Set vehicle based on user's progress
-      vehicleIcon.textContent = gameState.vehicle === 'scooter' ? '🛵' :
-        gameState.vehicle === 'bike' ? '🏍️' : '🚗';
-      destination.textContent = currentLocation.name;
-
-      commuteAnim.classList.add('active');
-
-      // After animation, show victory
-      setTimeout(() => {
-        commuteAnim.classList.remove('active');
-        completeQuest();
-      }, 2500);
-    }
-
-    // Complete Quest
-    function completeQuest() {
-      if (!currentLocation) return;
-
-      // Update game state
-      gameState.coins += currentLocation.coins;
-      gameState.englishLevel += 4;
-      gameState.questsCompleted += 1;
-
-      // Update UI
-      updateCoinDisplay();
-      document.getElementById('englishProgress').style.width = gameState.englishLevel + '%';
-
-      // Mark location as completed
-      const locationIndex = locations.findIndex(l => l.id === currentLocation.id);
-      if (locationIndex !== -1) {
-        locations[locationIndex].status = 'completed';
-        renderLocations();
-      }
-
-      // Show victory modal
-      document.getElementById('victoryModal').classList.add('active');
-
-      // Create confetti
-      createConfetti();
-    }
-
-    // Close Victory Modal
-    function closeVictory() {
-      document.getElementById('victoryModal').classList.remove('active');
-      currentLocation = null;
-    }
-
-    // Update Coin Display
-    function updateCoinDisplay() {
-      document.getElementById('coinCount').textContent = gameState.coins;
-    }
-
-    // Create Confetti
     function createConfetti() {
-      const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'];
-
-      for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-          const confetti = document.createElement('div');
-          confetti.className = 'confetti';
-          confetti.style.left = Math.random() * window.innerWidth + 'px';
-          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-          confetti.style.animationDelay = Math.random() * 0.5 + 's';
-          document.body.appendChild(confetti);
-
-          setTimeout(() => confetti.remove(), 3000);
-        }, i * 30);
-      }
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.backgroundColor = ['#FF6B35', '#FFD700', '#4CAF50', '#2196F3'][Math.floor(Math.random() * 4)];
+      c.style.animationDelay = Math.random() * 0.5 + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3000);
     }
 
-    // Initialize on load
-    init();
+    // Center the map on home on load
+    window.addEventListener('load', () => {
+      const content = document.querySelector('.content');
+      const map = document.querySelector('.city-map');
+      // Scroll to center the home building
+      content.scrollLeft = (map.offsetWidth - content.offsetWidth) / 2;
+      content.scrollTop = (map.offsetHeight - content.offsetHeight) / 2;
+    });
+
+    // Auto demo after 2 seconds
+    setTimeout(() => {
+      if (confirm('🎮 DEMO MODE\n\nWant to see a Special Quest appear during commute?\n\nClick OK to trigger!')) {
+        showSpecialQuest();
+      }
+    }, 2000);
   </script>
   <script type="module">
     // Import the functions you need from the SDKs you need
