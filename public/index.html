@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpeakX CLBL - Interactive Demo with Special Features</title>
+  <title>SpeakX CLBL - Home Upgradation System</title>
   <style>
     * {
       margin: 0;
@@ -105,46 +105,7 @@
     }
 
     /* Header Badges */
-    .challenges-icon-wrapper {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .challenges-icon {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
-      transition: transform 0.2s;
-    }
-
-    .challenges-icon:active {
-      transform: scale(0.95);
-    }
-
-    .challenges-badge {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      background: #f44336;
-      color: white;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: bold;
-      border: 2px solid white;
-    }
-
-    .journey-points-badge {
+    .repair-stars-badge {
       background: linear-gradient(135deg, #9C27B0 0%, #E91E63 100%);
       padding: 6px 12px;
       border-radius: 20px;
@@ -155,24 +116,6 @@
       color: white;
       font-size: 13px;
       box-shadow: 0 3px 10px rgba(156, 39, 176, 0.3);
-    }
-
-    .leaderboard-icon {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(255, 165, 0, 0.3);
-      transition: transform 0.2s;
-    }
-
-    .leaderboard-icon:active {
-      transform: scale(0.95);
     }
 
     .coins-badge {
@@ -188,7 +131,7 @@
       box-shadow: 0 3px 10px rgba(255, 165, 0, 0.3);
     }
 
-    /* Map - Made scrollable in all directions */
+    /* Map */
     .content {
       position: absolute;
       top: 104px;
@@ -241,14 +184,6 @@
       left: 50%;
     }
 
-    .map-landmark {
-      position: absolute;
-      z-index: 1;
-      opacity: 0.15;
-      pointer-events: none;
-      font-size: 70px;
-    }
-
     .map-tree {
       position: absolute;
       font-size: 35px;
@@ -257,7 +192,125 @@
       pointer-events: none;
     }
 
-    .map-explored {
+    /* Home Building */
+    .home-building {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90px;
+      height: 90px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border: 3px solid #4CAF50;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .home-building:active {
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    .home-building.damaged-1 {
+      border-color: #FFA726;
+      background: linear-gradient(135deg, white 0%, #FFF3E0 100%);
+    }
+
+    .home-building.damaged-2 {
+      border-color: #FF5722;
+      background: linear-gradient(135deg, white 0%, #FFE0B2 100%);
+    }
+
+    .home-building.damaged-3 {
+      border-color: #F44336;
+      background: linear-gradient(135deg, white 0%, #FFCDD2 100%);
+      animation: shake 0.5s infinite;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      25% {
+        transform: translate(-50%, -50%) rotate(-1deg);
+      }
+
+      75% {
+        transform: translate(-50%, -50%) rotate(1deg);
+      }
+    }
+
+    .home-icon {
+      font-size: 38px;
+      margin-bottom: 4px;
+    }
+
+    .home-label {
+      font-size: 9px;
+      font-weight: bold;
+      color: #4CAF50;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .home-building.damaged-1 .home-label {
+      color: #FFA726;
+    }
+
+    .home-building.damaged-2 .home-label {
+      color: #FF5722;
+    }
+
+    .home-building.damaged-3 .home-label {
+      color: #F44336;
+    }
+
+    .damage-indicator {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      background: #F44336;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 2px solid white;
+      animation: pulse 1s infinite;
+    }
+
+    .home-building.damaged-1 .damage-indicator,
+    .home-building.damaged-2 .damage-indicator,
+    .home-building.damaged-3 .damage-indicator {
+      display: flex;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    /* Rent Due Badge */
+    .rent-due-badge {
       position: fixed;
       top: 120px;
       left: 25px;
@@ -269,49 +322,41 @@
       border: 2px solid #FF6B35;
     }
 
-    .explored-text {
-      font-size: 11px;
+    .rent-due-badge.overdue {
+      border-color: #F44336;
+      background: linear-gradient(135deg, white 0%, #FFEBEE 100%);
+      animation: alertPulse 2s infinite;
+    }
+
+    @keyframes alertPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 4px 20px rgba(244, 67, 54, 0.6);
+      }
+    }
+
+    .rent-text {
+      font-size: 10px;
       color: #666;
       margin-bottom: 3px;
     }
 
-    .explored-value {
-      font-size: 22px;
+    .rent-value {
+      font-size: 18px;
       font-weight: bold;
       color: #FF6B35;
     }
 
-    /* Home building - centered in map */
-    .home-building {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 70px;
-      height: 70px;
-      background: white;
-      border-radius: 13px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      border: 3px solid #FF6B35;
+    .rent-due-badge.overdue .rent-value {
+      color: #F44336;
     }
 
-    .home-icon {
-      font-size: 32px;
-      margin-bottom: 4px;
-    }
-
-    .home-label {
-      font-size: 10px;
-      font-weight: bold;
-      color: #FF6B35;
-    }
-
-    /* Quest Pins - Made smaller */
+    /* Quest Pins */
     .quest-pin {
       position: absolute;
       width: 50px;
@@ -357,52 +402,7 @@
       border: 1.5px solid #FF6B35;
     }
 
-    .tomorrow-pill {
-      position: fixed;
-      top: 210px;
-      right: 25px;
-      background: white;
-      border-radius: 13px;
-      padding: 10px 13px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      z-index: 100;
-      border: 2px solid #ddd;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .tomorrow-pill:active {
-      transform: scale(0.95);
-    }
-
-    .tomorrow-pill.unlocked {
-      border-color: #4CAF50;
-    }
-
-    .ticket-icon {
-      font-size: 30px;
-    }
-
-    .ticket-text {
-      flex: 1;
-    }
-
-    .ticket-title {
-      font-size: 12px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .ticket-subtitle {
-      font-size: 9px;
-      color: #999;
-      margin-top: 2px;
-    }
-
-    /* Special Quest Modal */
+    /* Modal Overlay */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -411,89 +411,144 @@
       align-items: center;
       justify-content: center;
       z-index: 300;
+      padding: 20px;
     }
 
     .modal-overlay.active {
       display: flex;
     }
 
-    .modal-content {
+    /* Home Details Modal */
+    .home-modal-content {
       background: white;
       border-radius: 25px;
-      padding: 30px;
-      width: 90%;
-      max-width: 340px;
+      width: 100%;
+      max-width: 350px;
+      max-height: 90vh;
+      overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
 
-    .modal-header {
+    .home-modal-header {
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+      padding: 20px;
+      border-radius: 25px 25px 0 0;
+      text-align: center;
+      color: white;
+    }
+
+    .home-modal-icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    .home-modal-title {
       font-size: 22px;
       font-weight: bold;
-      color: #FF6B35;
-      margin-bottom: 20px;
-      text-align: center;
+      margin-bottom: 5px;
     }
 
-    .special-word-card {
-      background: linear-gradient(135deg, #FFF4E6 0%, #FFE9CC 100%);
-      padding: 25px;
-      border-radius: 18px;
-      text-align: center;
-      margin-bottom: 25px;
+    .home-modal-subtitle {
+      font-size: 13px;
+      opacity: 0.9;
     }
 
-    .special-word {
-      font-size: 32px;
+    .home-modal-body {
+      padding: 20px;
+    }
+
+    .damage-status {
+      background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      border: 2px solid #F44336;
+    }
+
+    .damage-status.healthy {
+      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+      border-color: #4CAF50;
+    }
+
+    .damage-title {
+      font-size: 14px;
       font-weight: bold;
-      color: #FF6B35;
-      margin-bottom: 12px;
-    }
-
-    .special-meaning {
-      font-size: 16px;
-      color: #333;
+      color: #F44336;
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .special-hindi {
-      font-size: 20px;
+    .damage-status.healthy .damage-title {
+      color: #4CAF50;
+    }
+
+    .damage-description {
+      font-size: 12px;
       color: #666;
     }
 
-    .special-options {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
+    .home-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
     }
 
-    .special-option {
-      background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-      border: none;
-      padding: 16px;
-      border-radius: 13px;
+    .stat-card {
+      background: #f5f5f5;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
       font-size: 18px;
       font-weight: bold;
-      color: #1976D2;
-      cursor: pointer;
-      transition: transform 0.2s;
+      color: #FF6B35;
     }
 
-    .special-option:active {
-      transform: scale(0.97);
+    .home-features {
+      margin-bottom: 15px;
+    }
+
+    .features-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
     }
 
     .modal-button {
-      width: 100%;
-      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+      flex: 1;
+      padding: 14px;
       border: none;
-      padding: 16px;
-      border-radius: 13px;
-      font-size: 17px;
+      border-radius: 12px;
+      font-size: 15px;
       font-weight: bold;
-      color: white;
       cursor: pointer;
-      box-shadow: 0 5px 18px rgba(255, 107, 53, 0.3);
       transition: transform 0.2s;
     }
 
@@ -501,215 +556,374 @@
       transform: scale(0.97);
     }
 
-    /* Tomorrow Reward Modal */
-    .reward-modal-content {
-      background: linear-gradient(135deg, #FFF4E6 0%, #FFE9CC 100%);
-      border-radius: 25px;
-      padding: 35px;
-      text-align: center;
-      width: 90%;
-      max-width: 340px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    .upgrade-button {
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      color: white;
     }
 
-    .reward-title {
-      font-size: 26px;
-      font-weight: bold;
-      color: #FF6B35;
-      margin-bottom: 15px;
+    .upgrade-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
     }
 
-    .reward-subtitle {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 25px;
-    }
-
-    .reward-items {
-      background: white;
-      border-radius: 18px;
-      padding: 25px;
-      margin-bottom: 20px;
-    }
-
-    .reward-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .reward-item:last-child {
-      border-bottom: none;
-    }
-
-    .reward-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .reward-value {
-      font-size: 19px;
-      font-weight: bold;
-      color: #FF6B35;
+    .repair-button {
+      background: linear-gradient(135deg, #9C27B0 0%, #E91E63 100%);
+      color: white;
     }
 
     .close-button {
-      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
-      border: none;
-      padding: 14px;
-      border-radius: 13px;
-      font-size: 16px;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      width: 100%;
+      background: #f5f5f5;
+      color: #666;
     }
 
-    /* Challenges Sheet */
-    .challenges-sheet {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+    /* Upgrade Modal - Carousel Style */
+    .upgrade-modal-content {
       background: white;
-      border-radius: 25px 25px 0 0;
-      max-height: 75vh;
-      transform: translateY(100%);
-      transition: transform 0.3s ease-out;
-      z-index: 400;
-      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .challenges-sheet.active {
-      transform: translateY(0);
-    }
-
-    .sheet-header {
-      padding: 20px;
-      border-bottom: 1px solid #f0f0f0;
+      border-radius: 25px;
+      width: 90%;
+      max-width: 360px;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
     }
 
-    .sheet-title {
+    .upgrade-header {
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      padding: 18px 20px;
+      text-align: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .upgrade-header-title {
       font-size: 20px;
       font-weight: bold;
-      color: #333;
+      margin-bottom: 5px;
     }
 
-    .close-sheet {
-      font-size: 28px;
-      cursor: pointer;
-      color: #999;
+    .upgrade-header-subtitle {
+      font-size: 12px;
+      opacity: 0.9;
     }
 
-    .sheet-tabs {
+    /* Navigation Dots */
+    .carousel-nav {
       display: flex;
-      padding: 15px;
-      gap: 10px;
-      border-bottom: 1px solid #f0f0f0;
+      gap: 8px;
+      padding: 15px 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      background: #f9f9f9;
+      border-bottom: 1px solid #eee;
     }
 
-    .tab {
-      flex: 1;
-      padding: 10px;
-      background: #f5f5f5;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #666;
+    .carousel-nav::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .carousel-nav::-webkit-scrollbar-track {
+      background: #f0f0f0;
+    }
+
+    .carousel-nav::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+
+    .carousel-dot {
+      min-width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid #ddd;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
       cursor: pointer;
+      transition: all 0.3s;
+      flex-shrink: 0;
+      position: relative;
     }
 
-    .tab.active {
-      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
-      color: white;
+    .carousel-dot.active {
+      border-color: #4CAF50;
+      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
     }
 
-    .sheet-content {
-      padding: 15px;
-      max-height: 50vh;
+    .carousel-dot.current {
+      border-color: #FF6B35;
+      background: linear-gradient(135deg, #FFF4E6 0%, #FFE9CC 100%);
+    }
+
+    .carousel-dot.locked {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Carousel Container */
+    .carousel-container {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .carousel-wrapper {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      padding: 20px;
       overflow-y: auto;
     }
 
-    .tab-panel {
-      display: none;
+    .carousel-slide::-webkit-scrollbar {
+      width: 4px;
     }
 
-    .tab-panel.active {
-      display: block;
+    .carousel-slide::-webkit-scrollbar-track {
+      background: #f0f0f0;
     }
 
-    .challenge-card {
-      background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-      border-radius: 15px;
-      padding: 18px;
+    .carousel-slide::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+
+    /* Home Card */
+    .home-card-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .home-card-icon {
+      font-size: 65px;
       margin-bottom: 12px;
     }
 
-    .challenge-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .challenge-text {
-      font-size: 15px;
+    .home-card-title {
+      font-size: 24px;
       font-weight: bold;
-      color: #1976D2;
-    }
-
-    .challenge-quest {
-      font-size: 13px;
       color: #333;
       margin-bottom: 6px;
     }
 
-    .challenge-time {
-      font-size: 12px;
+    .home-card-subtitle {
+      font-size: 13px;
       color: #666;
-      margin-bottom: 15px;
+      line-height: 1.4;
     }
 
-    .challenge-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .accept-btn,
-    .decline-btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
+    .home-card-badge {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 14px;
+      font-size: 11px;
       font-weight: bold;
-      cursor: pointer;
+      margin-top: 10px;
     }
 
-    .accept-btn {
-      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+    .badge-current {
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
       color: white;
     }
 
-    .decline-btn {
+    .badge-locked {
       background: #f5f5f5;
       color: #999;
     }
 
-    .empty-state {
+    .badge-available {
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      color: white;
+    }
+
+    /* Cost Grid */
+    .cost-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .cost-card {
+      background: #f5f5f5;
+      padding: 14px;
+      border-radius: 14px;
       text-align: center;
-      padding: 40px;
-      color: #999;
+    }
+
+    .cost-card.highlight {
+      background: linear-gradient(135deg, #FFF4E6 0%, #FFE9CC 100%);
+      border: 2px solid #FFB74D;
+    }
+
+    .cost-card-label {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .cost-card-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #FF6B35;
+    }
+
+    /* Features Section - Scrollable */
+    .features-section {
+      margin-bottom: 15px;
+    }
+
+    .features-header {
       font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .features-scroll {
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .features-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .features-scroll::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 4px;
+    }
+
+    .features-scroll::-webkit-scrollbar-thumb {
+      background: #4CAF50;
+      border-radius: 4px;
+    }
+
+    .features-scroll::-webkit-scrollbar-thumb:hover {
+      background: #45a049;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .feature-tag {
+      background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      color: #1976D2;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* Carousel Actions */
+    .carousel-actions {
+      padding: 15px 20px;
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+      flex-shrink: 0;
+    }
+
+    .carousel-button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+      margin-bottom: 8px;
+    }
+
+    .carousel-button:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    .carousel-button.upgrade {
+      background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+      color: white;
+    }
+
+    .carousel-button.upgrade:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .carousel-button.close {
+      background: white;
+      color: #666;
+      border: 1px solid #ddd;
+    }
+
+    /* Rent Payment Modal */
+    .rent-modal-content {
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      width: 90%;
+      max-width: 340px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .rent-modal-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .rent-modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .rent-modal-message {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .rent-amount-display {
+      background: linear-gradient(135deg, #FFF4E6 0%, #FFE9CC 100%);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .rent-amount-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .rent-amount-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #FF6B35;
     }
 
     /* Toast Notification */
@@ -719,34 +933,41 @@
       left: 50%;
       transform: translateX(-50%) translateY(-150%);
       background: white;
-      padding: 18px 25px;
+      padding: 16px 22px;
       border-radius: 18px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
       z-index: 500;
-      transition: transform 0.4s ease-out;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       border: 2px solid #4CAF50;
+      text-align: center;
+      max-width: 85%;
     }
 
     .toast.active {
       transform: translateX(-50%) translateY(0);
     }
 
+    .toast.error {
+      border-color: #F44336;
+    }
+
     .toast-title {
-      font-size: 17px;
+      font-size: 15px;
       font-weight: bold;
       color: #4CAF50;
-      text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
 
-    .toast-rewards {
-      font-size: 19px;
-      font-weight: bold;
-      color: #FF6B35;
-      text-align: center;
+    .toast.error .toast-title {
+      color: #F44336;
     }
 
-    /* Confetti Animation */
+    .toast-message {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Confetti */
     .confetti {
       position: fixed;
       width: 10px;
@@ -784,21 +1005,16 @@
           </div>
         </div>
         <div class="header-actions">
-          <div class="challenges-icon-wrapper" onclick="showChallengesSheet()">
-            <div class="challenges-icon">⚔️</div>
-            <div class="challenges-badge" id="challengesBadge">2</div>
+          <div class="repair-stars-badge">
+            <span id="repairStars">3</span> ⭐
           </div>
-          <div class="journey-points-badge">
-            <span id="journeyPoints">0</span> ⭐
-          </div>
-          <div class="leaderboard-icon">🏆</div>
           <div class="coins-badge">
-            <span id="coinsDisplay">150</span> 🪙
+            <span id="coinsDisplay">5000</span> 🪙
           </div>
         </div>
       </div>
 
-      <!-- Map Content - Now scrollable in all directions -->
+      <!-- Map Content -->
       <div class="content">
         <div class="city-map">
           <div class="map-background"></div>
@@ -807,346 +1023,700 @@
           <div class="map-road road-horizontal"></div>
           <div class="map-road road-vertical"></div>
 
-          <!-- Decorative Elements -->
-          <div class="map-landmark" style="top: 15%; left: 15%;">🏛️</div>
-          <div class="map-landmark" style="bottom: 20%; right: 20%;">🕌</div>
+          <!-- Trees -->
           <div class="map-tree" style="top: 25%; left: 35%;">🌳</div>
           <div class="map-tree" style="top: 60%; left: 70%;">🌳</div>
           <div class="map-tree" style="bottom: 30%; left: 25%;">🌳</div>
           <div class="map-tree" style="top: 40%; right: 30%;">🌳</div>
 
-          <!-- Home Building - Centered -->
-          <div class="home-building">
-            <div class="home-icon">🏠</div>
-            <div class="home-label">HOME</div>
+          <!-- Home Building -->
+          <div class="home-building" id="homeBuilding" onclick="showHomeDetails()">
+            <div class="damage-indicator">⚠️</div>
+            <div class="home-icon" id="homeIcon">🏠</div>
+            <div class="home-label" id="homeLabel">HOSTEL<br>No Rent</div>
           </div>
 
-          <!-- Quest Pins - Smaller and distributed around center -->
-          <div class="quest-pin" style="top: 35%; left: 60%;" onclick="startQuest('🍽️ Restaurant')">
+          <!-- Quest Pins -->
+          <div class="quest-pin" style="top: 35%; left: 60%;" onclick="completeQuest('🍽️ Restaurant')">
             <div class="pin-icon">
               <div class="pin-emoji">🍽️</div>
             </div>
             <div class="pin-label">Restaurant</div>
           </div>
 
-          <div class="quest-pin" style="top: 60%; left: 35%;" onclick="startQuest('🏦 Bank')">
+          <div class="quest-pin" style="top: 60%; left: 35%;" onclick="completeQuest('🏦 Bank')">
             <div class="pin-icon">
               <div class="pin-emoji">🏦</div>
             </div>
             <div class="pin-label">Bank</div>
           </div>
 
-          <div class="quest-pin" style="top: 30%; left: 35%;" onclick="startQuest('🌳 Park')">
+          <div class="quest-pin" style="top: 30%; left: 35%;" onclick="completeQuest('🌳 Park')">
             <div class="pin-icon">
               <div class="pin-emoji">🌳</div>
             </div>
             <div class="pin-label">Park</div>
           </div>
 
-          <div class="quest-pin" style="top: 55%; left: 60%;" onclick="startQuest('🏥 Hospital')">
+          <div class="quest-pin" style="top: 55%; left: 60%;" onclick="completeQuest('🏥 Hospital')">
             <div class="pin-icon">
               <div class="pin-emoji">🏥</div>
             </div>
             <div class="pin-label">Hospital</div>
           </div>
+        </div>
+      </div>
 
-          <div class="quest-pin" style="top: 42%; left: 70%;" onclick="startQuest('🏪 Store')">
-            <div class="pin-icon">
-              <div class="pin-emoji">🏪</div>
-            </div>
-            <div class="pin-label">Store</div>
+      <!-- Rent Due Badge -->
+      <div class="rent-due-badge" id="rentBadge">
+        <div class="rent-text">DAILY RENT</div>
+        <div class="rent-value"><span id="rentDisplay">0</span> 🪙</div>
+      </div>
+
+      <!-- Home Details Modal -->
+      <div class="modal-overlay" id="homeModal">
+        <div class="home-modal-content">
+          <div class="home-modal-header">
+            <div class="home-modal-icon" id="modalHomeIcon">🏠</div>
+            <div class="home-modal-title" id="modalHomeTitle">Hostel</div>
+            <div class="home-modal-subtitle" id="modalHomeSubtitle">Your starter home</div>
           </div>
-
-          <div class="quest-pin" style="top: 68%; left: 48%;" onclick="startQuest('🚉 Station')">
-            <div class="pin-icon">
-              <div class="pin-emoji">🚉</div>
+          <div class="home-modal-body">
+            <div class="damage-status healthy" id="damageStatus">
+              <div class="damage-title">✅ Perfect Condition</div>
+              <div class="damage-description">Your home is well maintained!</div>
             </div>
-            <div class="pin-label">Station</div>
+
+            <div class="home-stats">
+              <div class="stat-card">
+                <div class="stat-label">Purchase Cost</div>
+                <div class="stat-value" id="modalPurchaseCost">Free</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Daily Rent</div>
+                <div class="stat-value" id="modalDailyRent">0 🪙</div>
+              </div>
+            </div>
+
+            <div class="home-features">
+              <div class="features-title">🏡 Home Features</div>
+              <div id="featuresList"></div>
+            </div>
+
+            <div class="modal-actions">
+              <button class="modal-button upgrade-button" id="upgradeBtn" onclick="showUpgradeModal()">
+                ⬆️ Upgrade Home
+              </button>
+              <button class="modal-button repair-button" id="repairBtn" onclick="repairHome()" style="display: none;">
+                🔧 Repair (1⭐)
+              </button>
+            </div>
+            <button class="modal-button close-button" onclick="closeHomeModal()"
+              style="margin-top: 10px;">Close</button>
           </div>
         </div>
       </div>
 
-      <!-- Map Explored Counter -->
-      <div class="map-explored">
-        <div class="explored-text">MAP EXPLORED</div>
-        <div class="explored-value"><span id="mapExplored">25</span>%</div>
-      </div>
-
-      <!-- Tomorrow Ticket -->
-      <div class="tomorrow-pill" id="tomorrowPill" onclick="showTomorrowReward()">
-        <div class="ticket-icon">🎫</div>
-        <div class="ticket-text">
-          <div class="ticket-title">Tomorrow Ticket</div>
-          <div class="ticket-subtitle">Complete 1 quest</div>
-        </div>
-      </div>
-
-      <!-- Special Quest Modal -->
-      <div class="modal-overlay" id="specialQuestModal">
-        <div class="modal-content">
-          <div class="modal-header">✨ Special Quest! ✨</div>
-          <div id="specialQuestContent"></div>
-        </div>
-      </div>
-
-      <!-- Tomorrow Reward Modal -->
-      <div class="modal-overlay" id="tomorrowRewardModal">
-        <div class="reward-modal-content">
-          <div class="reward-title">🎁 Tomorrow's Rewards!</div>
-          <div class="reward-subtitle">Complete quests tomorrow to get:</div>
-          <div class="reward-items">
-            <div class="reward-item">
-              <div class="reward-label">🪙 Coins</div>
-              <div class="reward-value">2x</div>
-            </div>
-            <div class="reward-item">
-              <div class="reward-label">⭐ Journey Points</div>
-              <div class="reward-value">2x</div>
-            </div>
-            <div class="reward-item">
-              <div class="reward-label">🎯 Special Quests</div>
-              <div class="reward-value">+50%</div>
-            </div>
+      <!-- Rent Payment Modal -->
+      <div class="modal-overlay" id="rentModal">
+        <div class="rent-modal-content">
+          <div class="rent-modal-icon">🎉</div>
+          <div class="rent-modal-title">Hurray!</div>
+          <div class="rent-modal-message">You've successfully paid your rent. Practice now to earn bonus coins
+            and recover your coins!</div>
+          <div class="rent-amount-display">
+            <div class="rent-amount-label">Rent Paid</div>
+            <div class="rent-amount-value"><span id="rentPaidAmount">0</span> 🪙</div>
           </div>
-          <button class="close-button" onclick="closeTomorrowReward()">Got it! ✓</button>
+          <button class="modal-button upgrade-button" onclick="closeRentModal()">Let's Practice! 🚀</button>
         </div>
       </div>
 
-      <!-- Challenges Sheet -->
-      <div class="challenges-sheet" id="challengesSheet">
-        <div class="sheet-header">
-          <div class="sheet-title">⚔️ Challenges</div>
-          <div class="close-sheet" onclick="closeChallengesSheet()">×</div>
-        </div>
-        <div class="sheet-tabs">
-          <button class="tab active" onclick="switchTab(0)">New (2)</button>
-          <button class="tab" onclick="switchTab(1)">Pending (1)</button>
-          <button class="tab" onclick="switchTab(2)">Completed</button>
-        </div>
-        <div class="sheet-content">
-          <div class="tab-panel active" id="panel0">
-            <div class="challenge-card">
-              <div class="challenge-header">
-                <span class="challenge-text">Priya challenged you!</span>
-              </div>
-              <div class="challenge-quest">🍽️ Restaurant • Word Battle</div>
-              <div class="challenge-time">⏱️ 23h 45m left</div>
-              <div class="challenge-actions">
-                <button class="accept-btn" onclick="acceptChallenge('Priya', '🍽️ Restaurant')">Accept</button>
-                <button class="decline-btn" onclick="declineChallenge()">Decline</button>
-              </div>
-            </div>
-            <div class="challenge-card">
-              <div class="challenge-header">
-                <span class="challenge-text">Amit challenged you!</span>
-              </div>
-              <div class="challenge-quest">🏦 Bank • Grammar Duel</div>
-              <div class="challenge-time">⏱️ 22h 30m left</div>
-              <div class="challenge-actions">
-                <button class="accept-btn" onclick="acceptChallenge('Amit', '🏦 Bank')">Accept</button>
-                <button class="decline-btn" onclick="declineChallenge()">Decline</button>
-              </div>
-            </div>
+      <!-- Upgrade Modal with Carousel -->
+      <div class="modal-overlay" id="upgradeModal">
+        <div class="upgrade-modal-content">
+          <div class="upgrade-header">
+            <div class="upgrade-header-title">🏠 Home Upgrades</div>
+            <div class="upgrade-header-subtitle">Swipe to explore all homes</div>
           </div>
-          <div class="tab-panel" id="panel1">
-            <div class="challenge-card">
-              <div class="challenge-header">
-                <span class="challenge-text">Waiting for Rahul</span>
-              </div>
-              <div class="challenge-quest">🌳 Park • Speed Race</div>
-              <div class="challenge-time">⏱️ 20h 15m left</div>
-              <div style="font-size: 12px; color: #999; margin-top: 7px;">Pending...</div>
-            </div>
+
+          <div class="carousel-nav" id="carouselNav"></div>
+
+          <div class="carousel-container">
+            <div class="carousel-wrapper" id="carouselWrapper"></div>
           </div>
-          <div class="tab-panel" id="panel2">
-            <div class="empty-state">No completed challenges yet</div>
+
+          <div class="carousel-actions">
+            <button class="carousel-button upgrade" id="carouselUpgradeBtn" onclick="upgradeFromCarousel()">
+              ⬆️ Upgrade to this Home
+            </button>
+            <button class="carousel-button close" onclick="closeUpgradeModal()">Close</button>
           </div>
         </div>
       </div>
 
       <!-- Toast Notification -->
       <div class="toast" id="toast">
-        <div class="toast-title">✨ Nice! ✨</div>
-        <div class="toast-rewards">+<span id="toastCoins">5</span> 🪙 • +<span id="toastPoints">2</span> ⭐</div>
+        <div class="toast-title" id="toastTitle">Success!</div>
+        <div class="toast-message" id="toastMessage">Action completed</div>
       </div>
     </div>
   </div>
 
   <script>
-    let gameState = {
-      coins: 150,
-      journeyPoints: 0,
-      mapExplored: 25,
-      tomorrowTicketClaimed: false,
-      specialQuestShown: false
+    // Home Data
+    const HOMES = {
+      hostel: {
+        name: 'Hostel',
+        icon: '🏠',
+        purchaseCost: 0,
+        dailyRent: 0,
+        subtitle: 'Your starter home',
+        features: [
+          '🛏️ Shared dormitory',
+          '🚿 Common bathroom',
+          '🍽️ Mess facility',
+          '📚 Study area',
+          '🔒 Basic security'
+        ],
+        description: 'A basic shared living space for students'
+      },
+      pg: {
+        name: 'PG',
+        icon: '🏘️',
+        purchaseCost: 2000,
+        dailyRent: 50,
+        subtitle: 'Rent starts here',
+        features: [
+          '🛏️ Private room',
+          '🚿 Shared bathroom',
+          '🍽️ 2 meals included',
+          '📶 WiFi included',
+          '🧺 Laundry service',
+          '🔑 Room key access'
+        ],
+        description: 'Your first independent living space'
+      },
+      studio: {
+        name: 'Studio',
+        icon: '🏢',
+        purchaseCost: 6000,
+        dailyRent: 120,
+        subtitle: 'First independence',
+        features: [
+          '🛏️ Private bedroom',
+          '🚿 Private bathroom',
+          '🍳 Small kitchen',
+          '📺 Living space',
+          '🅿️ Parking spot',
+          '🌡️ AC facility',
+          '💡 Power backup'
+        ],
+        description: 'Complete privacy in a compact space'
+      },
+      '1bhk': {
+        name: '1BHK',
+        icon: '🏡',
+        purchaseCost: 12000,
+        dailyRent: 220,
+        subtitle: 'Adult life begins',
+        features: [
+          '🛏️ Spacious bedroom',
+          '🚿 Modern bathroom',
+          '🍳 Full kitchen',
+          '🛋️ Living room',
+          '🌿 Balcony',
+          '🔒 Security system',
+          '🚗 Covered parking',
+          '💼 Work desk area'
+        ],
+        description: 'A proper apartment for independent living'
+      },
+      '2bhk': {
+        name: '2BHK',
+        icon: '🏠',
+        purchaseCost: 22000,
+        dailyRent: 350,
+        subtitle: 'Financial growth',
+        features: [
+          '🛏️ 2 Bedrooms',
+          '🚿 2 Bathrooms',
+          '🍳 Modular kitchen',
+          '🛋️ Large living room',
+          '🌿 Big balcony',
+          '🎮 Space for hobbies',
+          '💼 Work from home setup',
+          '📚 Study room',
+          '🎨 Storage space'
+        ],
+        description: 'Room to grow and entertain'
+      },
+      '3bhk': {
+        name: '3BHK',
+        icon: '🏘️',
+        purchaseCost: 40000,
+        dailyRent: 550,
+        subtitle: 'Aspirational lifestyle',
+        features: [
+          '🛏️ 3 Bedrooms',
+          '🚿 3 Bathrooms',
+          '🍳 Premium kitchen',
+          '🛋️ Spacious living area',
+          '🌿 Multiple balconies',
+          '🎯 Home office',
+          '🎨 Guest room',
+          '🏋️ Gym access',
+          '🎬 Entertainment room',
+          '🍷 Mini bar area'
+        ],
+        description: 'Luxury living with space for everything'
+      },
+      luxury: {
+        name: 'Luxury Apartment',
+        icon: '🏛️',
+        purchaseCost: 70000,
+        dailyRent: 850,
+        subtitle: 'High success',
+        features: [
+          '🛏️ 3+ Bedrooms',
+          '🚿 Designer bathrooms',
+          '🍳 Chef kitchen',
+          '🛋️ Premium interiors',
+          '🌿 Terrace garden',
+          '🏊 Pool access',
+          '🎾 Sports facilities',
+          '🚗 Premium parking',
+          '🔐 24/7 security',
+          '🎭 Club membership',
+          '🧘 Yoga studio',
+          '👔 Concierge service'
+        ],
+        description: 'Premium living with all amenities'
+      },
+      villa: {
+        name: 'Villa',
+        icon: '🏰',
+        purchaseCost: 120000,
+        dailyRent: 1400,
+        subtitle: 'Dream achievement',
+        features: [
+          '🛏️ 4+ Bedrooms',
+          '🚿 Luxury bathrooms',
+          '🍳 Gourmet kitchen',
+          '🛋️ Multiple living areas',
+          '🌳 Private garden',
+          '🏊 Private pool',
+          '🚗 Multiple car garage',
+          '🎭 Entertainment room',
+          '🏋️ Private gym',
+          '👨‍🍳 Staff quarters',
+          '🎬 Home theater',
+          '🍷 Wine cellar',
+          '🎨 Art gallery space'
+        ],
+        description: 'The pinnacle of success and luxury'
+      }
     };
 
-    function updateCoins(amt) {
-      gameState.coins += amt;
+    const HOME_SEQUENCE = ['hostel', 'pg', 'studio', '1bhk', '2bhk', '3bhk', 'luxury', 'villa'];
+
+    let gameState = {
+      coins: 5000,
+      repairStars: 3,
+      currentHome: 'hostel',
+      damageLevel: 0,
+      daysSinceRent: 0,
+      lastLoginDate: null,
+      rentPaid: true
+    };
+
+    let currentCarouselIndex = 0;
+
+    // Initialize
+    function init() {
+      loadGameState();
+      checkDailyRent();
+      updateUI();
+      centerMap();
+    }
+
+    function loadGameState() {
+      const saved = localStorage.getItem('speakx_game_state');
+      if (saved) {
+        gameState = { ...gameState, ...JSON.parse(saved) };
+      }
+    }
+
+    function saveGameState() {
+      localStorage.setItem('speakx_game_state', JSON.stringify(gameState));
+    }
+
+    function checkDailyRent() {
+      const today = new Date().toDateString();
+
+      if (gameState.lastLoginDate !== today) {
+        if (gameState.lastLoginDate && !gameState.rentPaid) {
+          gameState.daysSinceRent++;
+          gameState.damageLevel = Math.min(gameState.damageLevel + 1, 3);
+
+          if (gameState.daysSinceRent >= 3) {
+            downgradeHome();
+          }
+        }
+
+        const currentHomeData = HOMES[gameState.currentHome];
+        if (currentHomeData.dailyRent > 0) {
+          if (gameState.coins >= currentHomeData.dailyRent) {
+            gameState.coins -= currentHomeData.dailyRent;
+            gameState.rentPaid = true;
+            gameState.daysSinceRent = 0;
+            showRentPaidModal(currentHomeData.dailyRent);
+          } else {
+            gameState.rentPaid = false;
+            showToast('⚠️ Insufficient Coins!', 'Cannot pay rent. Complete quests to earn coins!', true);
+          }
+        } else {
+          gameState.rentPaid = true;
+        }
+
+        gameState.lastLoginDate = today;
+        saveGameState();
+      }
+    }
+
+    function updateUI() {
       document.getElementById('coinsDisplay').textContent = gameState.coins;
-    }
-    function updateJourneyPoints(amt) {
-      gameState.journeyPoints += amt;
-      document.getElementById('journeyPoints').textContent = gameState.journeyPoints;
-    }
-    function updateMapExplored(amt) {
-      gameState.mapExplored = Math.min(gameState.mapExplored + amt, 100);
-      document.getElementById('mapExplored').textContent = gameState.mapExplored;
-    }
+      document.getElementById('repairStars').textContent = gameState.repairStars;
 
-    function startQuest(name) {
-      // 40% chance to show special quest
-      if (!gameState.specialQuestShown && Math.random() < 0.4) {
-        setTimeout(() => showSpecialQuest(), 1500);
-        gameState.specialQuestShown = true;
+      const homeData = HOMES[gameState.currentHome];
+      const building = document.getElementById('homeBuilding');
+      document.getElementById('homeIcon').textContent = homeData.icon;
+      document.getElementById('homeLabel').innerHTML = homeData.name + '<br>' + (homeData.dailyRent > 0 ? homeData.dailyRent + ' 🪙/day' : 'No Rent');
+
+      building.className = 'home-building';
+      if (gameState.damageLevel > 0) {
+        building.classList.add('damaged-' + gameState.damageLevel);
       }
-      alert(`🚶 Starting: ${name}\n\nWatch for surprise quests on the way!`);
-    }
 
-    function showSpecialQuest() {
-      const types = ['vocab', 'grammar', 'speaking'];
-      const type = types[Math.floor(Math.random() * types.length)];
-      const modal = document.getElementById('specialQuestModal');
-      const content = document.getElementById('specialQuestContent');
-
-      if (type === 'vocab') {
-        content.innerHTML = `
-                    <div class="special-word-card">
-                        <div class="special-word">Fare</div>
-                        <div class="special-meaning">Money to pay for ride</div>
-                        <div class="special-hindi">किराया</div>
-                    </div>
-                    <button class="modal-button" onclick="completeSpecialQuest(5, 2)">Got it! ✓</button>
-                `;
-      } else if (type === 'grammar') {
-        content.innerHTML = `
-                    <div style="font-size: 17px; font-weight: bold; margin-bottom: 18px;">How much _____ it?</div>
-                    <div class="special-options">
-                        <button class="special-option" onclick="completeSpecialQuest(8, 3)">is</button>
-                        <button class="special-option" onclick="completeSpecialQuest(8, 3)">are</button>
-                    </div>
-                `;
+      document.getElementById('rentDisplay').textContent = homeData.dailyRent;
+      const rentBadge = document.getElementById('rentBadge');
+      if (!gameState.rentPaid && homeData.dailyRent > 0) {
+        rentBadge.classList.add('overdue');
       } else {
-        content.innerHTML = `
-                    <div style="font-size: 23px; font-weight: bold; color: #FF6B35; margin-bottom: 18px; padding: 18px; background: #FFF4E6; border-radius: 13px;">"India Gate, please"</div>
-                    <button class="modal-button" onclick="simulateRecording()" style="background: linear-gradient(135deg, #4CAF50, #8BC34A);">🎤 Tap to Speak</button>
-                `;
+        rentBadge.classList.remove('overdue');
       }
-      modal.classList.add('active');
     }
 
-    function simulateRecording() {
-      const btn = event.target;
-      btn.innerHTML = '🎤 Recording...';
-      btn.disabled = true;
+    function showHomeDetails() {
+      const homeData = HOMES[gameState.currentHome];
+
+      document.getElementById('modalHomeIcon').textContent = homeData.icon;
+      document.getElementById('modalHomeTitle').textContent = homeData.name;
+      document.getElementById('modalHomeSubtitle').textContent = homeData.subtitle;
+      document.getElementById('modalPurchaseCost').textContent = homeData.purchaseCost === 0 ? 'Free' : homeData.purchaseCost + ' 🪙';
+      document.getElementById('modalDailyRent').textContent = homeData.dailyRent + ' 🪙';
+
+      const featuresList = document.getElementById('featuresList');
+      featuresList.innerHTML = homeData.features.map(f =>
+        `<div class="feature-item">${f}</div>`
+      ).join('');
+
+      const damageStatus = document.getElementById('damageStatus');
+      const damageMessages = [
+        { title: '✅ Perfect Condition', desc: 'Your home is well maintained!', class: 'healthy' },
+        { title: '⚠️ Minor Damage', desc: 'Cracks appearing, needs attention soon', class: '' },
+        { title: '🔧 Moderate Damage', desc: 'Furniture damaged, messy environment', class: '' },
+        { title: '🚨 Severe Damage', desc: 'Heavy damage! Repair urgently or face downgrade!', class: '' }
+      ];
+
+      const msg = damageMessages[gameState.damageLevel];
+      damageStatus.className = 'damage-status ' + msg.class;
+      damageStatus.innerHTML = `
+                <div class="damage-title">${msg.title}</div>
+                <div class="damage-description">${msg.desc}</div>
+            `;
+
+      const repairBtn = document.getElementById('repairBtn');
+      repairBtn.style.display = gameState.damageLevel > 0 ? 'block' : 'none';
+
+      const currentIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+      const upgradeBtn = document.getElementById('upgradeBtn');
+      if (currentIndex < HOME_SEQUENCE.length - 1) {
+        upgradeBtn.disabled = false;
+        upgradeBtn.textContent = '⬆️ Upgrade Home';
+      } else {
+        upgradeBtn.disabled = true;
+        upgradeBtn.textContent = '👑 Max Level!';
+      }
+
+      document.getElementById('homeModal').classList.add('active');
+    }
+
+    function closeHomeModal() {
+      document.getElementById('homeModal').classList.remove('active');
+    }
+
+    function showUpgradeModal() {
+      currentCarouselIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+      buildCarousel();
+      document.getElementById('homeModal').classList.remove('active');
+      document.getElementById('upgradeModal').classList.add('active');
+
+      // Scroll active dot into view
       setTimeout(() => {
-        btn.innerHTML = '✓ Great!';
-        setTimeout(() => completeSpecialQuest(10, 5), 500);
-      }, 2000);
+        const activeDot = document.querySelector('.carousel-dot.active');
+        if (activeDot) {
+          activeDot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }, 100);
     }
 
-    function completeSpecialQuest(coins, points) {
-      document.getElementById('specialQuestModal').classList.remove('active');
-      updateCoins(coins);
-      updateJourneyPoints(points);
+    function closeUpgradeModal() {
+      document.getElementById('upgradeModal').classList.remove('active');
+    }
 
-      document.getElementById('toastCoins').textContent = coins;
-      document.getElementById('toastPoints').textContent = points;
+    function buildCarousel() {
+      const navContainer = document.getElementById('carouselNav');
+      const wrapperContainer = document.getElementById('carouselWrapper');
+
+      // Build navigation dots
+      navContainer.innerHTML = HOME_SEQUENCE.map((homeKey, index) => {
+        const homeData = HOMES[homeKey];
+        const currentIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+        let classes = 'carousel-dot';
+
+        if (index === currentCarouselIndex) classes += ' active';
+        if (index === currentIndex) classes += ' current';
+        if (index > currentIndex + 1) classes += ' locked';
+
+        return `<div class="${classes}" onclick="goToSlide(${index})" data-index="${index}">${homeData.icon}</div>`;
+      }).join('');
+
+      // Build slides
+      wrapperContainer.innerHTML = HOME_SEQUENCE.map((homeKey, index) => {
+        const homeData = HOMES[homeKey];
+        const currentIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+
+        let badge = '';
+        let badgeClass = '';
+        if (index === currentIndex) {
+          badge = 'CURRENT HOME';
+          badgeClass = 'badge-current';
+        } else if (index === currentIndex + 1) {
+          badge = 'NEXT UPGRADE';
+          badgeClass = 'badge-available';
+        } else if (index > currentIndex + 1) {
+          badge = 'LOCKED';
+          badgeClass = 'badge-locked';
+        } else {
+          badge = 'PREVIOUS';
+          badgeClass = 'badge-locked';
+        }
+
+        return `
+                    <div class="carousel-slide">
+                        <div class="home-card-header">
+                            <div class="home-card-icon">${homeData.icon}</div>
+                            <div class="home-card-title">${homeData.name}</div>
+                            <div class="home-card-subtitle">${homeData.description}</div>
+                            <div class="home-card-badge ${badgeClass}">${badge}</div>
+                        </div>
+                        
+                        <div class="cost-grid">
+                            <div class="cost-card ${index === currentIndex + 1 ? 'highlight' : ''}">
+                                <div class="cost-card-label">Purchase Cost</div>
+                                <div class="cost-card-value">${homeData.purchaseCost === 0 ? 'Free' : homeData.purchaseCost.toLocaleString() + ' 🪙'}</div>
+                            </div>
+                            <div class="cost-card">
+                                <div class="cost-card-label">Daily Rent</div>
+                                <div class="cost-card-value">${homeData.dailyRent === 0 ? 'Free' : homeData.dailyRent + ' 🪙'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="features-section">
+                            <div class="features-header">🏡 Features & Amenities</div>
+                            <div class="features-scroll">
+                                <div class="features-grid">
+                                    ${homeData.features.map(feature => `<div class="feature-tag">${feature}</div>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+      }).join('');
+
+      updateCarousel();
+    }
+
+    function goToSlide(index) {
+      const currentIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+
+      if (index > currentIndex + 1) {
+        showToast('🔒 Locked', 'Upgrade homes in sequence to unlock', true);
+        return;
+      }
+
+      currentCarouselIndex = index;
+      updateCarousel();
+
+      // Scroll clicked dot into view
+      const clickedDot = document.querySelector(`.carousel-dot[data-index="${index}"]`);
+      if (clickedDot) {
+        clickedDot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    function updateCarousel() {
+      const wrapper = document.getElementById('carouselWrapper');
+      wrapper.style.transform = `translateX(-${currentCarouselIndex * 100}%)`;
+
+      document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentCarouselIndex);
+      });
+
+      const upgradeBtn = document.getElementById('carouselUpgradeBtn');
+      const currentIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+      const selectedHomeKey = HOME_SEQUENCE[currentCarouselIndex];
+      const selectedHomeData = HOMES[selectedHomeKey];
+
+      if (currentCarouselIndex === currentIndex) {
+        upgradeBtn.textContent = '✅ This is your current home';
+        upgradeBtn.disabled = true;
+      } else if (currentCarouselIndex === currentIndex + 1) {
+        const canAfford = gameState.coins >= selectedHomeData.purchaseCost;
+        upgradeBtn.textContent = `⬆️ Upgrade for ${selectedHomeData.purchaseCost.toLocaleString()} 🪙`;
+        upgradeBtn.disabled = !canAfford;
+
+        if (!canAfford) {
+          upgradeBtn.textContent = `💰 Need ${(selectedHomeData.purchaseCost - gameState.coins).toLocaleString()} more coins`;
+        }
+      } else if (currentCarouselIndex < currentIndex) {
+        upgradeBtn.textContent = '⬅️ Previous home - Cannot downgrade manually';
+        upgradeBtn.disabled = true;
+      } else {
+        upgradeBtn.textContent = '🔒 Unlock previous homes first';
+        upgradeBtn.disabled = true;
+      }
+    }
+
+    function upgradeFromCarousel() {
+      const currentIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+
+      if (currentCarouselIndex !== currentIndex + 1) return;
+
+      const nextHomeKey = HOME_SEQUENCE[currentCarouselIndex];
+      const nextHomeData = HOMES[nextHomeKey];
+
+      if (gameState.coins >= nextHomeData.purchaseCost) {
+        gameState.coins -= nextHomeData.purchaseCost;
+        gameState.currentHome = nextHomeKey;
+        gameState.damageLevel = 0;
+        gameState.daysSinceRent = 0;
+
+        closeUpgradeModal();
+        showToast('🎉 Home Upgraded!', `Welcome to your new ${nextHomeData.name}!`);
+        createConfettiExplosion();
+
+        updateUI();
+        saveGameState();
+      }
+    }
+
+    function repairHome() {
+      if (gameState.repairStars > 0) {
+        gameState.repairStars--;
+        gameState.damageLevel = 0;
+        gameState.daysSinceRent = 0;
+
+        closeHomeModal();
+        showToast('🔧 Home Repaired!', 'Your home is back to perfect condition!');
+
+        updateUI();
+        saveGameState();
+      }
+    }
+
+    function downgradeHome() {
+      const currentIndex = HOME_SEQUENCE.indexOf(gameState.currentHome);
+      if (currentIndex > 0) {
+        const previousHomeKey = HOME_SEQUENCE[currentIndex - 1];
+        gameState.currentHome = previousHomeKey;
+        gameState.damageLevel = 0;
+        gameState.daysSinceRent = 0;
+
+        const homeData = HOMES[previousHomeKey];
+        showToast('😔 Home Downgraded', `You've moved to ${homeData.name}. Pay rent regularly to avoid this!`, true);
+
+        updateUI();
+        saveGameState();
+      }
+    }
+
+    function completeQuest(questName) {
+      const rewards = {
+        coins: Math.floor(Math.random() * 50) + 100,
+        repairStar: gameState.repairStars < 5
+      };
+
+      gameState.coins += rewards.coins;
+      if (rewards.repairStar) {
+        gameState.repairStars++;
+      }
+
+      updateUI();
+      saveGameState();
+
+      showToast('✨ Quest Complete!', `+${rewards.coins} 🪙` + (rewards.repairStar ? ' +1 ⭐' : ''));
+      createConfettiExplosion();
+    }
+
+    function showRentPaidModal(amount) {
+      document.getElementById('rentPaidAmount').textContent = amount;
+      document.getElementById('rentModal').classList.add('active');
+      createConfettiExplosion();
+    }
+
+    function closeRentModal() {
+      document.getElementById('rentModal').classList.remove('active');
+    }
+
+    function showToast(title, message, isError = false) {
       const toast = document.getElementById('toast');
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastMessage').textContent = message;
+
+      toast.className = 'toast' + (isError ? ' error' : '');
       toast.classList.add('active');
 
-      for (let i = 0; i < 30; i++) createConfetti();
-
-      setTimeout(() => toast.classList.remove('active'), 1500);
-
-      if (!gameState.tomorrowTicketClaimed) claimTomorrowTicket();
+      // Auto-dismiss after 2 seconds
+      setTimeout(() => toast.classList.remove('active'), 2000);
     }
 
-    function claimTomorrowTicket() {
-      gameState.tomorrowTicketClaimed = true;
-      const pill = document.getElementById('tomorrowPill');
-      pill.classList.add('unlocked');
-      pill.innerHTML = `
-                <div class="ticket-icon">✅</div>
-                <div class="ticket-text">
-                    <div class="ticket-title">Tomorrow: 2x Coins!</div>
-                    <div class="ticket-subtitle">Tap to preview</div>
-                </div>
-            `;
-      setTimeout(() => alert('🎉 Tomorrow Reward Unlocked!\n\nTap the badge to see what you\'ll get!'), 500);
-    }
-
-    function showTomorrowReward() {
-      if (gameState.tomorrowTicketClaimed) {
-        document.getElementById('tomorrowRewardModal').classList.add('active');
-        for (let i = 0; i < 50; i++) createConfetti();
-      } else {
-        alert('🔒 Complete 1 quest or 2 special quests to unlock!');
+    function createConfettiExplosion() {
+      for (let i = 0; i < 40; i++) {
+        setTimeout(() => createConfetti(), i * 30);
       }
-    }
-
-    function closeTomorrowReward() {
-      document.getElementById('tomorrowRewardModal').classList.remove('active');
-    }
-
-    function showChallengesSheet() {
-      document.getElementById('challengesSheet').classList.add('active');
-    }
-
-    function closeChallengesSheet() {
-      document.getElementById('challengesSheet').classList.remove('active');
-    }
-
-    function switchTab(idx) {
-      document.querySelectorAll('.tab').forEach((tab, i) => {
-        tab.classList.toggle('active', i === idx);
-        document.getElementById('panel' + i).classList.toggle('active', i === idx);
-      });
-    }
-
-    function acceptChallenge(name, quest) {
-      alert(`✅ Challenge Accepted!\n\nRace ${name} to complete ${quest}\nGood luck! 🎯`);
-      closeChallengesSheet();
-      const badge = document.getElementById('challengesBadge');
-      const count = parseInt(badge.textContent) - 1;
-      badge.textContent = count;
-      if (count === 0) badge.style.display = 'none';
-    }
-
-    function declineChallenge() {
-      alert('Challenge declined');
-      closeChallengesSheet();
-      const badge = document.getElementById('challengesBadge');
-      const count = parseInt(badge.textContent) - 1;
-      badge.textContent = count;
-      if (count === 0) badge.style.display = 'none';
     }
 
     function createConfetti() {
       const c = document.createElement('div');
       c.className = 'confetti';
       c.style.left = Math.random() * 100 + '%';
-      c.style.backgroundColor = ['#FF6B35', '#FFD700', '#4CAF50', '#2196F3'][Math.floor(Math.random() * 4)];
-      c.style.animationDelay = Math.random() * 0.5 + 's';
+      c.style.backgroundColor = ['#FF6B35', '#FFD700', '#4CAF50', '#2196F3', '#9C27B0'][Math.floor(Math.random() * 5)];
+      c.style.animationDelay = Math.random() * 0.3 + 's';
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 3000);
     }
 
-    // Center the map on home on load
-    window.addEventListener('load', () => {
+    function centerMap() {
       const content = document.querySelector('.content');
       const map = document.querySelector('.city-map');
-      // Scroll to center the home building
       content.scrollLeft = (map.offsetWidth - content.offsetWidth) / 2;
       content.scrollTop = (map.offsetHeight - content.offsetHeight) / 2;
-    });
+    }
 
-    // Auto demo after 2 seconds
-    setTimeout(() => {
-      if (confirm('🎮 DEMO MODE\n\nWant to see a Special Quest appear during commute?\n\nClick OK to trigger!')) {
-        showSpecialQuest();
-      }
-    }, 2000);
+    // Start the game
+    window.addEventListener('load', init);
   </script>
   <script type="module">
     // Import the functions you need from the SDKs you need
